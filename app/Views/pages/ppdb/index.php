@@ -21,7 +21,9 @@
     <div class="card">
     <div class="card-header">
         <div class="card-title">✏️ Data Pendaftar PPDB</div>
+        <?php if (hasPermission('ppdb', 'create')): ?>
         <a href="<?= base_url('ppdb/tambah') ?>" class="btn btn-primary">＋ Tambah Pendaftar</a>
+        <?php endif; ?>
     </div>
     <div class="card-body" style="padding:0">
         <div class="table-wrap">
@@ -51,10 +53,14 @@
                 </td>
                 <td>
                 <div style="display:flex;gap:4px;flex-wrap:wrap">
+                    <?php if (hasPermission('ppdb', 'edit')): ?>
                     <a href="<?= base_url('ppdb/status/'.$p['id'].'/Diterima') ?>" class="btn btn-sm" style="background:#E8F5E9;color:#2E7D32">✅</a>
                     <a href="<?= base_url('ppdb/status/'.$p['id'].'/Ditolak') ?>"  class="btn btn-sm" style="background:#FFEBEE;color:#C62828">❌</a>
+                    <?php endif; ?>
+                    <?php if (hasPermission('ppdb', 'delete')): ?>
                     <a href="<?= base_url('ppdb/hapus/'.$p['id']) ?>" class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus data ini?')">🗑️</a>
+                    <?php endif; ?>
                 </div>
                 </td>
             </tr>

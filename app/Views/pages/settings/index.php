@@ -40,7 +40,7 @@
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:700;color:var(--ink);margin-bottom:20px">Ubah Password</h3>
         <form action="<?= base_url('settings/password') ?>" method="POST" style="max-width:440px">
             <?= csrf_field() ?>
-            <div class="fg"><label>Password Saat Ini</label><input type="password" name="pw_current" placeholder="••••••••"></div>
+            <div class="fg"><label>Password Saat Ini</label><input type="password" name="pw_current" placeholder="********"></div>
             <div class="fg"><label>Password Baru</label><input type="password" name="pw_new" placeholder="Min. 6 karakter"></div>
             <div class="fg"><label>Konfirmasi Password</label><input type="password" name="pw_confirm" placeholder="Ulangi password baru"></div>
             <button type="submit" class="btn btn-primary">🔒 Simpan Password</button>

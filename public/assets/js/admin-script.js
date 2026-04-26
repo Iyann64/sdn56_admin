@@ -483,6 +483,7 @@ function openGaleriModal(id = null) {
     document.getElementById('gEmoji').value    = g.emoji;
   } else {
     document.getElementById('formGaleri').reset();
+    document.getElementById('fileName').textContent = '';
   }
   document.getElementById('modalGaleri').classList.add('open');
 }
@@ -491,19 +492,59 @@ function saveGaleri() {
   const nama     = document.getElementById('gNama').value.trim();
   const kategori = document.getElementById('gKategori').value;
   const emoji    = document.getElementById('gEmoji').value.trim() || '🖼️';
-  if (!nama) { showToast('error','Nama foto wajib diisi!'); return; }
+  const fileInput = document.getElementById('gFoto');
 
-  if (editingId) {
-    const idx = DATA.galeri.findIndex(x => x.id === editingId);
-    if (idx > -1) Object.assign(DATA.galeri[idx], { nama, kategori, emoji });
-    showToast('success','Foto berhasil diperbarui!');
-  } else {
-    DATA.galeri.push({ id:Date.now(), nama, kategori, emoji, tgl:new Date().toISOString().slice(0,10) });
-    showToast('success','Foto berhasil ditambahkan!');
+  if (!nama) {
+    showToast('error','Nama foto wajib diisi!');
+    return;
   }
-  closeModal('modalGaleri');
-  renderGaleri();
+
+  if (!fileInput.files || fileInput.files.length === 0) {
+    showToast('error','Pilih file foto terlebih dahulu!');
+    return;
+  }
+
+  // Submit form ke server
+  const form = document.getElementById('formGaleri');
+  const formData = new FormData(form);
+
+  fetch(form.action, {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())
+  .then(html => {
+    // Check jika ada error di response
+    if (html.includes('error')) {
+      showToast('error', 'Gagal upload foto. Periksa format atau ukuran file.');
+    } else {
+      showToast('success', 'Foto berhasil ditambahkan!');
+      closeModal('modalGaleri');
+      // Reload page untuk melihat foto terbaru
+      setTimeout(() => location.reload(), 1500);
+    }
+  })
+  .catch(err => {
+    showToast('error', 'Terjadi kesalahan saat upload.');
+    console.error(err);
+  });
 }
+
+// Handle file selection
+document.addEventListener('DOMContentLoaded', function() {
+  const fileInput = document.getElementById('gFoto');
+  if (fileInput) {
+    fileInput.addEventListener('change', function() {
+      const fileName = document.getElementById('fileName');
+      if (this.files && this.files.length > 0) {
+        fileName.textContent = '✓ ' + this.files[0].name;
+        fileName.style.color = 'var(--green)';
+      } else {
+        fileName.textContent = '';
+      }
+    });
+  }
+});
 
 /* ═══════════════════════════════════════
    GURU

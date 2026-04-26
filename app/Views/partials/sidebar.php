@@ -3,16 +3,22 @@
     $currentPage = $uri->getSegment(1) ?: 'dashboard';
     $adminUser   = $admin_user ?? ['nama' => 'Admin', 'role' => '', 'avatar' => 'A'];
 
+    // Test apakah helper ter-load
+    if (!function_exists('canAccess')) {
+        // Jika belum, load manual
+        require_once APPPATH . 'Helpers/PermissionHelper.php';
+    }
+
     $menu = [
-    ['page'=>'dashboard','icon'=>'📊','label'=>'Dashboard',       'badge'=>0],
-    ['page'=>'berita',   'icon'=>'📰','label'=>'Berita & Konten', 'badge'=>2],
-    ['page'=>'ppdb',     'icon'=>'✏️','label'=>'Data PPDB',       'badge'=>2],
-    ['page'=>'agenda',   'icon'=>'📅','label'=>'Agenda & Kegiatan','badge'=>0],
-    ['page'=>'galeri',   'icon'=>'🖼️','label'=>'Galeri Foto',     'badge'=>0],
-    ['page'=>'guru',     'icon'=>'👨‍🏫','label'=>'Guru & Staf',    'badge'=>0],
+    ['page'=>'dashboard','icon'=>'📊','label'=>'Dashboard',       'badge'=>0, 'resource'=>'dashboard'],
+    ['page'=>'berita',   'icon'=>'📰','label'=>'Berita & Konten', 'badge'=>2, 'resource'=>'berita'],
+    ['page'=>'ppdb',     'icon'=>'✏️','label'=>'Data PPDB',       'badge'=>2, 'resource'=>'ppdb'],
+    ['page'=>'agenda',   'icon'=>'📅','label'=>'Agenda & Kegiatan','badge'=>0, 'resource'=>'agenda'],
+    ['page'=>'galeri',   'icon'=>'🖼️','label'=>'Galeri Foto',     'badge'=>0, 'resource'=>'galeri'],
+    ['page'=>'guru',     'icon'=>'👨‍🏫','label'=>'Guru & Staf',    'badge'=>0, 'resource'=>'guru'],
     ];
     $menuSistem = [
-    ['page'=>'settings','icon'=>'⚙️','label'=>'Pengaturan'],
+    ['page'=>'settings','icon'=>'⚙️','label'=>'Pengaturan', 'resource'=>'settings'],
     ];
     ?>
     <aside class="sidebar" id="sidebar">
@@ -27,23 +33,41 @@
     <nav class="sb-nav">
         <div class="sb-section">Menu Utama</div>
         <?php foreach ($menu as $m): ?>
-        <a href="<?= base_url($m['page']) ?>"
-        class="sb-item <?= $currentPage === $m['page'] ? 'active' : '' ?>">
-        <span class="sb-ic"><?= $m['icon'] ?></span>
-        <span class="sb-lbl"><?= esc($m['label']) ?></span>
-        <?php if ($m['badge'] > 0): ?>
-        <span class="sb-badge"><?= $m['badge'] ?></span>
-        <?php endif; ?>
-        </a>
+            <?php 
+            try {
+                $hasAccess = canAccess($m['resource']);
+            } catch (Exception $e) {
+                $hasAccess = true; // Default allow jika error
+            }
+            ?>
+            <?php if ($hasAccess): ?>
+            <a href="<?= base_url($m['page']) ?>"
+            class="sb-item <?= $currentPage === $m['page'] ? 'active' : '' ?>">
+            <span class="sb-ic"><?= $m['icon'] ?></span>
+            <span class="sb-lbl"><?= esc($m['label']) ?></span>
+            <?php if ($m['badge'] > 0): ?>
+            <span class="sb-badge"><?= $m['badge'] ?></span>
+            <?php endif; ?>
+            </a>
+            <?php endif; ?>
         <?php endforeach; ?>
 
         <div class="sb-section">Sistem</div>
         <?php foreach ($menuSistem as $m): ?>
-        <a href="<?= base_url($m['page']) ?>"
-        class="sb-item <?= $currentPage === $m['page'] ? 'active' : '' ?>">
-        <span class="sb-ic"><?= $m['icon'] ?></span>
-        <span class="sb-lbl"><?= esc($m['label']) ?></span>
-        </a>
+            <?php 
+            try {
+                $hasAccess = canAccess($m['resource']);
+            } catch (Exception $e) {
+                $hasAccess = false; // Untuk settings, default deny
+            }
+            ?>
+            <?php if ($hasAccess): ?>
+            <a href="<?= base_url($m['page']) ?>"
+            class="sb-item <?= $currentPage === $m['page'] ? 'active' : '' ?>">
+            <span class="sb-ic"><?= $m['icon'] ?></span>
+            <span class="sb-lbl"><?= esc($m['label']) ?></span>
+            </a>
+            <?php endif; ?>
         <?php endforeach; ?>
 
         <a href="<?= esc($web_url ?? 'http://localhost:8080') ?>" target="_blank" class="sb-item">
@@ -53,7 +77,14 @@
     </nav>
 
     <div class="sb-footer">
-        <a href="<?= base_url('settings') ?>" class="sb-user">
+        <?php 
+        try {
+            $canAccessSettings = canAccess('settings');
+        } catch (Exception $e) {
+            $canAccessSettings = false;
+        }
+        ?>
+        <a href="<?= $canAccessSettings ? base_url('settings') : '#' ?>" class="sb-user" <?= !$canAccessSettings ? 'style="cursor:not-allowed;opacity:0.7;"' : '' ?>>
         <div class="sb-avatar"><?= esc($adminUser['avatar'] ?? 'A') ?></div>
         <div class="sb-user-info">
             <div class="sb-user-name"><?= esc($adminUser['nama'] ?? 'Admin') ?></div>

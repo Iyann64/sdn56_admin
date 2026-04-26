@@ -1,7 +1,9 @@
     <div class="card">
     <div class="card-header">
         <div class="card-title">📰 Daftar Berita</div>
+        <?php if (hasPermission('berita', 'create')): ?>
         <a href="<?= base_url('berita/tambah') ?>" class="btn btn-primary">＋ Tambah Berita</a>
+        <?php endif; ?>
     </div>
     <div class="card-body" style="padding:0">
         <div class="table-wrap">
@@ -32,10 +34,14 @@
                 <td><?= number_format($b['views'] ?? 0) ?></td>
                 <td>
                 <div style="display:flex;gap:6px">
+                    <?php if (hasPermission('berita', 'edit')): ?>
                     <a href="<?= base_url('berita/edit/'.$b['id']) ?>" class="btn btn-outline btn-sm">✏️ Edit</a>
+                    <?php endif; ?>
+                    <?php if (hasPermission('berita', 'delete')): ?>
                     <a href="<?= base_url('berita/hapus/'.$b['id']) ?>"
                     class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus berita ini?')">🗑️</a>
+                    <?php endif; ?>
                 </div>
                 </td>
             </tr>

@@ -1,7 +1,9 @@
     <div class="card">
     <div class="card-header">
         <div class="card-title">👨‍🏫 Data Guru & Staf</div>
+        <?php if (hasPermission('guru', 'create')): ?>
         <a href="<?= base_url('guru/tambah') ?>" class="btn btn-primary">＋ Tambah Guru</a>
+        <?php endif; ?>
     </div>
     <div class="card-body" style="padding:0">
         <div class="table-wrap">
@@ -33,9 +35,13 @@
                 </td>
                 <td>
                 <div style="display:flex;gap:6px">
+                    <?php if (hasPermission('guru', 'edit')): ?>
                     <a href="<?= base_url('guru/edit/'.$g['id']) ?>" class="btn btn-outline btn-sm">✏️ Edit</a>
+                    <?php endif; ?>
+                    <?php if (hasPermission('guru', 'delete')): ?>
                     <a href="<?= base_url('guru/hapus/'.$g['id']) ?>" class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus data guru ini?')">🗑️</a>
+                    <?php endif; ?>
                 </div>
                 </td>
             </tr>

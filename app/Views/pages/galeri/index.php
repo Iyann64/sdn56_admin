@@ -1,19 +1,11 @@
     <div class="card">
     <div class="card-header">
         <div class="card-title">🖼️ Galeri Foto</div>
-        <button class="btn btn-primary" onclick="document.getElementById('modalGaleri').classList.add('open')">＋ Upload Foto</button>
+        <?php if (hasPermission('galeri', 'create')): ?>
+        <button class="btn btn-primary" onclick="openGaleriModal()">＋ Upload Foto</button>
+        <?php endif; ?>
     </div>
     <div class="card-body">
-
-        <!-- Inline upload form (tersembunyi, dipanggil via modal JS) -->
-        <form id="uploadGaleriForm" action="<?= base_url('galeri/upload') ?>" method="POST" enctype="multipart/form-data" style="display:none">
-        <?= csrf_field() ?>
-        <input type="file"   name="foto"     id="uploadFotoInput">
-        <input type="text"   name="nama"     id="uploadNama">
-        <input type="text"   name="kategori" id="uploadKategori">
-        <input type="text"   name="emoji"    id="uploadEmoji">
-        <button type="submit" id="uploadSubmitBtn">Upload</button>
-        </form>
 
         <!-- Grid galeri -->
         <div class="gallery-mgr" id="galeriGrid">
@@ -42,11 +34,13 @@
                 <div style="font-size:12px;font-weight:600;color:white;margin-bottom:3px"><?= esc($g['nama']) ?></div>
                 <div style="font-size:10px;color:rgba(255,255,255,.7)"><?= esc($g['kategori']) ?></div>
             </div>
+            <?php if (hasPermission('galeri', 'delete')): ?>
             <a href="<?= base_url('galeri/hapus/'.$g['id']) ?>"
                 onclick="return confirm('Hapus foto ini?')"
                 style="background:rgba(239,83,80,.9);color:white;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;text-decoration:none">
                 🗑️
             </a>
+            <?php endif; ?>
             </div>
         </div>
         <?php endforeach; endif; ?>
@@ -54,17 +48,3 @@
 
     </div>
     </div>
-
-    <!-- Override modal galeri supaya submit ke controller -->
-    <script>
-    function saveGaleri() {
-    const nama     = document.getElementById('gNama').value.trim();
-    const kategori = document.getElementById('gKategori').value;
-    const emoji    = document.getElementById('gEmoji').value || '🖼️';
-    if (!nama) { alert('Nama foto wajib diisi.'); return; }
-    document.getElementById('uploadNama').value     = nama;
-    document.getElementById('uploadKategori').value = kategori;
-    document.getElementById('uploadEmoji').value    = emoji;
-    document.getElementById('uploadGaleriForm').submit();
-    }
-    </script>

@@ -47,9 +47,9 @@ class GaleriAdmin extends BaseController
 
         if ($file && $file->isValid() && ! $file->hasMoved()) {
             // Validasi file gambar
-            if (! $this->validate(['foto' => 'is_image[foto]|max_size[foto,5120]'])) {
+            if (! $this->validate(['foto' => 'is_image[foto]|max_size[foto,20000]'])) {
                 return redirect()->to('/galeri')
-                    ->with('error', 'File tidak valid. Gunakan JPG/PNG/WEBP maks 5MB.');
+                    ->with('error', 'File tidak valid. Gunakan JPG/PNG/WEBP maks 20MB.');
             }
 
             $namaFile = $file->getRandomName();

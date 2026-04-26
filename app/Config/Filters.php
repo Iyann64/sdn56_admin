@@ -9,6 +9,7 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\AuthFilter;
+use App\Filters\RoleFilter;
 
 class Filters extends BaseConfig
 {
@@ -22,26 +23,26 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'auth'          => AuthFilter::class,   // ← autentikasi admin
+        'role'          => RoleFilter::class,   // ← role-based access control
     ];
 
     /**
      * Filter globals
      */
     public array $globals = [
-    'before' => [
-        'csrf' => ['except' => ['login/proses']],  // ← tambahkan ini
-    ],
-    'after' => [
-        'toolbar',
-    ],
-];
+        'before' => [
+            'csrf'  => ['except' => ['login/proses']],
+            'auth'  => ['except' => ['login', 'login/proses']],  // ← proteksi semua route, kecuali login
+        ],
+        'after' => [
+            'toolbar',
+        ],
+    ];
 
     public array $methods = [];
 
     /**
      * Filter auth berlaku di semua route KECUALI /login dan /login/proses
      */
-    public array $filters = [
-        'auth' => ['except' => ['login', 'login/proses']],
-    ];
+    public array $filters = [];
 }

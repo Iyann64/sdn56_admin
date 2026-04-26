@@ -111,25 +111,29 @@
         <div class="modal-close" onclick="closeModal('modalGaleri')">✕</div>
         </div>
         <div class="modal-body">
-        <form id="formGaleri" enctype="multipart/form-data">
-            <div style="border:2px dashed var(--c4);border-radius:14px;padding:32px;text-align:center;
+        <form id="formGaleri" action="<?= base_url('galeri/upload') ?>" method="POST" enctype="multipart/form-data">
+            <?= csrf_field() ?>
+            <input type="file" id="gFoto" name="foto" accept="image/*" style="display:none">
+            <div id="uploadZone" style="border:2px dashed var(--c4);border-radius:14px;padding:32px;text-align:center;
                         background:var(--c5);margin-bottom:16px;cursor:pointer;transition:all .2s"
                 onmouseenter="this.style.borderColor='var(--c3)'"
-                onmouseleave="this.style.borderColor='var(--c4)'">
+                onmouseleave="this.style.borderColor='var(--c4)'"
+                onclick="document.getElementById('gFoto').click()">
             <div style="font-size:40px;margin-bottom:8px">📁</div>
             <div style="font-size:14px;font-weight:600;color:var(--c1)">Klik untuk pilih foto</div>
             <div style="font-size:12px;color:var(--gray);margin-top:4px">PNG, JPG, WEBP — maks. 5MB</div>
+            <div id="fileName" style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600"></div>
             </div>
-            <div class="fg"><label>Nama / Keterangan Foto *</label><input type="text" id="gNama" placeholder="Deskripsi singkat foto..."></div>
+            <div class="fg"><label>Nama / Keterangan Foto *</label><input type="text" id="gNama" name="nama" placeholder="Deskripsi singkat foto..."></div>
             <div class="form-grid-2">
             <div class="fg">
                 <label>Kategori</label>
-                <select id="gKategori">
+                <select id="gKategori" name="kategori">
                 <option>Kegiatan</option><option>Prestasi</option><option>Fasilitas</option>
                 <option>Lingkungan</option><option>Olahraga</option><option>Seni Budaya</option>
                 </select>
             </div>
-            <div class="fg"><label>Emoji / Ikon</label><input type="text" id="gEmoji" placeholder="🖼️" maxlength="4"></div>
+            <div class="fg"><label>Emoji / Ikon</label><input type="text" id="gEmoji" name="emoji" placeholder="🖼️" maxlength="4"></div>
             </div>
         </form>
         </div>

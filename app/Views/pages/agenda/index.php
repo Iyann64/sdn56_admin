@@ -1,7 +1,9 @@
     <div class="card">
     <div class="card-header">
         <div class="card-title">📅 Agenda & Kegiatan</div>
+        <?php if (hasPermission('agenda', 'create')): ?>
         <a href="<?= base_url('agenda/tambah') ?>" class="btn btn-primary">＋ Tambah Agenda</a>
+        <?php endif; ?>
     </div>
     <div class="card-body" style="padding:0">
         <div class="table-wrap">
@@ -25,9 +27,13 @@
                 </td>
                 <td>
                 <div style="display:flex;gap:6px">
+                    <?php if (hasPermission('agenda', 'edit')): ?>
                     <a href="<?= base_url('agenda/edit/'.$ag['id']) ?>" class="btn btn-outline btn-sm">✏️</a>
+                    <?php endif; ?>
+                    <?php if (hasPermission('agenda', 'delete')): ?>
                     <a href="<?= base_url('agenda/hapus/'.$ag['id']) ?>" class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus agenda ini?')">🗑️</a>
+                    <?php endif; ?>
                 </div>
                 </td>
             </tr>

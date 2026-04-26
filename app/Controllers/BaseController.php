@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
  */
 abstract class BaseController extends Controller
 {
-    protected $helpers = ['url', 'form', 'html', 'text'];
+    protected $helpers = ['url', 'form', 'html', 'text', 'permission'];
 
     protected array $data = [];
 
