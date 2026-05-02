@@ -121,7 +121,7 @@
                 onclick="document.getElementById('gFoto').click()">
             <div style="font-size:40px;margin-bottom:8px">📁</div>
             <div style="font-size:14px;font-weight:600;color:var(--c1)">Klik untuk pilih foto</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:4px">PNG, JPG, WEBP — maks. 5MB</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:4px">PNG, JPG, WEBP — maks. 20MB</div>
             <div id="fileName" style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600"></div>
             </div>
             <div class="fg"><label>Nama / Keterangan Foto *</label><input type="text" id="gNama" name="nama" placeholder="Deskripsi singkat foto..."></div>
@@ -139,7 +139,7 @@
         </div>
         <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('modalGaleri')">Batal</button>
-        <button class="btn btn-primary" onclick="saveGaleri()">📤 Upload</button>
+        <button type="submit" form="formGaleri" class="btn btn-primary">📤 Upload</button>
         </div>
     </div>
     </div>

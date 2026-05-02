@@ -28,6 +28,8 @@ abstract class BaseController extends Controller
             'site_email' => 'sdnegeri56pbm@gmail.com',
             'logo_url'   => base_url('assets/img/logo.jpg'),
             'web_url'    => 'http://localhost:8080',
+            'upload_url' => 'http://sekolah1.test/uploads/', // URL folder upload di web publik
+            'public_uploads_path' => FCPATH . '../../sekolah1/public/uploads/', // Path fisik ke folder uploads web publik
         ];
     }
 

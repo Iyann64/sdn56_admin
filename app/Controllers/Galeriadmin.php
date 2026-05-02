@@ -35,25 +35,19 @@ class GaleriAdmin extends BaseController
         $rules = [
             'nama'     => 'required|min_length[3]|max_length[200]',
             'kategori' => 'required',
+            'foto'     => 'uploaded[foto]|is_image[foto]|max_size[foto,20480]', // Max 20MB
         ];
 
         if (! $this->validate($rules)) {
             return redirect()->to('/galeri')
                 ->with('error', implode('<br>', $this->validator->getErrors()));
         }
-
         $namaFile = null;
         $file     = $this->request->getFile('foto');
-
         if ($file && $file->isValid() && ! $file->hasMoved()) {
-            // Validasi file gambar
-            if (! $this->validate(['foto' => 'is_image[foto]|max_size[foto,20000]'])) {
-                return redirect()->to('/galeri')
-                    ->with('error', 'File tidak valid. Gunakan JPG/PNG/WEBP maks 20MB.');
-            }
-
             $namaFile = $file->getRandomName();
-            $file->move(FCPATH . 'uploads', $namaFile);
+            // Pindahkan file ke folder uploads/galeri di proyek web publik
+            $file->move($this->data['public_uploads_path'] . 'galeri', $namaFile);
         }
 
         $this->model->insert([
@@ -72,7 +66,7 @@ class GaleriAdmin extends BaseController
         $item = $this->model->find($id);
 
         if ($item && ! empty($item['file_foto'])) {
-            $filePath = FCPATH . 'uploads/' . $item['file_foto'];
+            $filePath = $this->data['public_uploads_path'] . 'galeri/' . $item['file_foto'];
             if (file_exists($filePath)) {
                 unlink($filePath);
             }

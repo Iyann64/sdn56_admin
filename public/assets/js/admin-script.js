@@ -488,48 +488,6 @@ function openGaleriModal(id = null) {
   document.getElementById('modalGaleri').classList.add('open');
 }
 
-function saveGaleri() {
-  const nama     = document.getElementById('gNama').value.trim();
-  const kategori = document.getElementById('gKategori').value;
-  const emoji    = document.getElementById('gEmoji').value.trim() || '🖼️';
-  const fileInput = document.getElementById('gFoto');
-
-  if (!nama) {
-    showToast('error','Nama foto wajib diisi!');
-    return;
-  }
-
-  if (!fileInput.files || fileInput.files.length === 0) {
-    showToast('error','Pilih file foto terlebih dahulu!');
-    return;
-  }
-
-  // Submit form ke server
-  const form = document.getElementById('formGaleri');
-  const formData = new FormData(form);
-
-  fetch(form.action, {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.text())
-  .then(html => {
-    // Check jika ada error di response
-    if (html.includes('error')) {
-      showToast('error', 'Gagal upload foto. Periksa format atau ukuran file.');
-    } else {
-      showToast('success', 'Foto berhasil ditambahkan!');
-      closeModal('modalGaleri');
-      // Reload page untuk melihat foto terbaru
-      setTimeout(() => location.reload(), 1500);
-    }
-  })
-  .catch(err => {
-    showToast('error', 'Terjadi kesalahan saat upload.');
-    console.error(err);
-  });
-}
-
 // Handle file selection
 document.addEventListener('DOMContentLoaded', function() {
   const fileInput = document.getElementById('gFoto');

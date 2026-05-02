@@ -20,16 +20,20 @@ $routes->setAutoRoute(false);
 // ══════════════════════════════════════════════
 // AUTH — tidak dilindungi AuthFilter
 // ══════════════════════════════════════════════
-$routes->get( '/login',         'Auth::login');
-$routes->post('/login/proses',  'Auth::proses');
-$routes->get( '/logout',        'Auth::logout');
+$routes->get( '/login',                'Auth::login');
+$routes->post('/login/proses',         'Auth::proses');
+$routes->get( '/logout',               'Auth::logout');
+$routes->get( '/forgot-password',      'Auth::forgotPassword');
+$routes->post('/forgot-password/kirim', 'Auth::kirimResetLink');
+$routes->get( '/reset-password/(:any)', 'Auth::resetPassword/$1');
+$routes->post('/reset-password/simpan', 'Auth::simpanPasswordBaru');
 
 
 // ══════════════════════════════════════════════
-// DASHBOARD
+// DASHBOARD (dilindungi AuthFilter)
 // ══════════════════════════════════════════════
-$routes->get('/',          'Dashboard::index');
-$routes->get('/dashboard', 'Dashboard::index');
+$routes->get('/',          'Dashboard::index',  ['filter' => 'auth']);
+$routes->get('/dashboard', 'Dashboard::index',  ['filter' => 'auth']);
 
 
 // ══════════════════════════════════════════════
@@ -47,9 +51,14 @@ $routes->get( '/berita/hapus/(:num)',  'BeritaAdmin::hapus/$1',         ['filter
 // PPDB
 // ══════════════════════════════════════════════
 $routes->get( '/ppdb',                        'PpdbAdmin::index',           ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
+$routes->get( '/ppdb/detail/(:num)',          'PpdbAdmin::detail/$1',       ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
 $routes->get( '/ppdb/tambah',                 'PpdbAdmin::tambah',          ['filter' => 'role:Super Admin,Operator']);
 $routes->post('/ppdb/simpan',                 'PpdbAdmin::simpan',          ['filter' => 'role:Super Admin,Operator']);
+$routes->get( '/ppdb/edit/(:num)',            'PpdbAdmin::edit/$1',          ['filter' => 'role:Super Admin,Operator']);
+$routes->post('/ppdb/update/(:num)',          'PpdbAdmin::update/$1',        ['filter' => 'role:Super Admin,Operator']);
 $routes->get( '/ppdb/status/(:num)/(:alpha)', 'PpdbAdmin::ubahStatus/$1/$2', ['filter' => 'role:Super Admin,Operator']);
+$routes->get( '/ppdb/export',                 'PpdbAdmin::export',           ['filter' => 'role:Super Admin,Operator']);
+$routes->get( '/ppdb/export/(:num)',          'PpdbAdmin::export/$1',        ['filter' => 'role:Super Admin,Operator']);
 $routes->get( '/ppdb/hapus/(:num)',           'PpdbAdmin::hapus/$1',        ['filter' => 'role:Super Admin,Operator']);
 
 

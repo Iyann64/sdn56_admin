@@ -79,7 +79,7 @@
 
         <div class="form-check">
             <label><input type="checkbox" name="remember"> Ingat saya</label>
-            <a href="#">Lupa password?</a>
+            <a href="<?= base_url('forgot-password') ?>">Lupa password?</a>
         </div>
 
         <button type="submit" class="btn-login">

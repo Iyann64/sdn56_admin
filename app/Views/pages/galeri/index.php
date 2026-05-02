@@ -20,7 +20,7 @@
         </div>
         <?php else: foreach ($list as $g):
             $bg  = $bgMap[$g['kategori']] ?? '#006064';
-            $src = $g['file_foto'] ? base_url('uploads/'.$g['file_foto']) : null;
+            $src = $g['file_foto'] ? $upload_url . 'galeri/' . $g['file_foto'] : null;
         ?>
         <div class="gm-item" style="position:relative;border-radius:14px;overflow:hidden;aspect-ratio:1;background:<?= $src ? "url('$src') center/cover" : $bg ?>">
             <?php if (!$src): ?>

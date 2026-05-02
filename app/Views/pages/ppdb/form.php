@@ -1,8 +1,9 @@
     <?php
-    $item     = $item ?? null;
-    $isEdit   = $item !== null;
+    $item     = $item ?? [];
+    $id       = $item['id'] ?? null;
+    $isEdit   = $id !== null;
     $formAction = $isEdit
-        ? base_url('ppdb/update/' . $item['id'])
+        ? base_url('ppdb/update/' . $id)
         : base_url('ppdb/simpan');
     ?>
 
@@ -30,13 +31,61 @@
 
         <div class="form-row">
             <div class="form-group">
-            <label class="form-label">Nama Lengkap <span class="req">*</span></label>
-            <input type="text" name="nama" class="form-control"
+            <label class="form-label">Nama Lengkap Siswa <span class="req">*</span></label>
+            <input type="text" name="nama_lengkap" class="form-control"
                     placeholder="Nama sesuai akta kelahiran"
-                    value="<?= old('nama', $item['nama'] ?? '') ?>" required>
+                    value="<?= old('nama_lengkap', $item['nama'] ?? '') ?>" required>
             </div>
             <div class="form-group">
-            <label class="form-label">Usia (Tahun)</label>
+            <label class="form-label">NIK Siswa <span class="req">*</span></label>
+            <input type="text" name="nik_siswa" class="form-control"
+                    placeholder="16 digit NIK"
+                    value="<?= old('nik_siswa', $item['nik_siswa'] ?? '') ?>" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+            <label class="form-label">NISN (Jika ada)</label>
+            <input type="text" name="nisn" class="form-control"
+                    placeholder="Nomor Induk Siswa Nasional"
+                    value="<?= old('nisn', $item['nisn'] ?? '') ?>">
+            </div>
+            <div class="form-group">
+            <label class="form-label">Jenis Kelamin <span class="req">*</span></label>
+            <select name="jenis_kelamin" class="form-control" required>
+                <option value="">Pilih...</option>
+                <option value="Laki-laki" <?= old('jenis_kelamin', $item['jenis_kelamin'] ?? '') === 'Laki-laki' ? 'selected' : '' ?>>Laki-laki</option>
+                <option value="Perempuan" <?= old('jenis_kelamin', $item['jenis_kelamin'] ?? '') === 'Perempuan' ? 'selected' : '' ?>>Perempuan</option>
+            </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+            <label class="form-label">Tempat Lahir <span class="req">*</span></label>
+            <input type="text" name="tempat_lahir" class="form-control"
+                    placeholder="Kota kelahiran"
+                    value="<?= old('tempat_lahir', $item['tempat_lahir'] ?? '') ?>" required>
+            </div>
+            <div class="form-group">
+            <label class="form-label">Agama <span class="req">*</span></label>
+            <select name="agama" class="form-control" required>
+                <?php foreach (['Islam','Kristen','Katolik','Hindu','Budha','Khonghucu'] as $ag): ?>
+                <option value="<?= $ag ?>" <?= old('agama', $item['agama'] ?? '') === $ag ? 'selected' : '' ?>><?= $ag ?></option>
+                <?php endforeach; ?>
+            </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+            <label class="form-label">Tanggal Lahir <span class="req">*</span></label>
+            <input type="date" name="tgl_lahir" class="form-control"
+                    value="<?= old('tgl_lahir', $item['tgl_lahir'] ?? '') ?>" required>
+            </div>
+            <div class="form-group">
+            <label class="form-label">Usia Saat Ini</label>
             <input type="number" name="usia" class="form-control"
                     placeholder="6 atau 7" min="5" max="9"
                     value="<?= old('usia', $item['usia'] ?? '') ?>">
@@ -45,23 +94,16 @@
 
         <div class="form-row">
             <div class="form-group">
-            <label class="form-label">Tempat Lahir</label>
-            <input type="text" name="tempat_lahir" class="form-control"
-                    placeholder="Kota kelahiran"
-                    value="<?= old('tempat_lahir', $item['tempat_lahir'] ?? '') ?>">
+            <label class="form-label">Kewarganegaraan</label>
+            <input type="text" name="kewarganegaraan" class="form-control"
+                    value="<?= old('kewarganegaraan', $item['kewarganegaraan'] ?? 'WNI') ?>">
             </div>
             <div class="form-group">
-            <label class="form-label">Tanggal Lahir</label>
-            <input type="date" name="tgl_lahir" class="form-control"
-                    value="<?= old('tgl_lahir', $item['tgl_lahir'] ?? '') ?>">
+            <label class="form-label">Kondisi Kesehatan</label>
+            <input type="text" name="status_kesehatan" class="form-control"
+                    placeholder="Alergi/Penyakit (jika ada)"
+                    value="<?= old('status_kesehatan', $item['status_kesehatan'] ?? '') ?>">
             </div>
-        </div>
-
-        <div class="form-group">
-            <label class="form-label">Asal TK / PAUD</label>
-            <input type="text" name="asal" class="form-control"
-                placeholder="Nama TK/PAUD asal (kosong jika tidak ada)"
-                value="<?= old('asal', $item['asal'] ?? '') ?>">
         </div>
 
         <!-- ── Data Orang Tua ─────────────────── -->
@@ -75,6 +117,41 @@
                     value="<?= old('nama_ortu', $item['nama_ortu'] ?? '') ?>" required>
             </div>
             <div class="form-group">
+            <label class="form-label">NIK Orang Tua / Wali <span class="req">*</span></label>
+            <input type="text" name="nik_ortu" class="form-control"
+                    placeholder="16 digit NIK"
+                    value="<?= old('nik_ortu', $item['nik_ortu'] ?? '') ?>" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+            <label class="form-label">Pekerjaan</label>
+            <input type="text" name="pekerjaan_ortu" class="form-control"
+                    placeholder="Contoh: Karyawan Swasta"
+                    value="<?= old('pekerjaan_ortu', $item['pekerjaan_ortu'] ?? '') ?>">
+            </div>
+            <div class="form-group">
+            <label class="form-label">Agama Orang Tua <span class="req">*</span></label>
+            <select name="agama_ortu" class="form-control" required>
+                <option value="">Pilih...</option>
+                <?php foreach (['Islam','Kristen','Katolik','Hindu','Budha','Khonghucu'] as $ag): ?>
+                <option value="<?= $ag ?>" <?= old('agama_ortu', $item['agama_ortu'] ?? '') === $ag ? 'selected' : '' ?>><?= $ag ?></option>
+                <?php endforeach; ?>
+            </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+            <label class="form-label">Hubungan <span class="req">*</span></label>
+            <select name="hubungan" class="form-control" required>
+                <?php foreach (['Ayah','Ibu','Wali'] as $h): ?>
+                <option value="<?= $h ?>" <?= old('hubungan', $item['hubungan'] ?? '') === $h ? 'selected' : '' ?>><?= $h ?></option>
+                <?php endforeach; ?>
+            </select>
+            </div>
+            <div class="form-group">
             <label class="form-label">No. Telepon / WhatsApp <span class="req">*</span></label>
             <input type="tel" name="telepon" class="form-control"
                     placeholder="08xx-xxxx-xxxx"
@@ -82,11 +159,35 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <label class="form-label">Email</label>
+        <div class="form-row">
+            <div class="form-group">
+            <label class="form-label">Email Aktif <span class="req">*</span></label>
             <input type="email" name="email" class="form-control"
                 placeholder="email@contoh.com"
-                value="<?= old('email', $item['email'] ?? '') ?>">
+                value="<?= old('email', $item['email'] ?? '') ?>" required>
+            </div>
+            <div class="form-group">
+            <label class="form-label">Kode Pos</label>
+            <input type="text" name="kode_pos" class="form-control"
+                    placeholder="5 digit"
+                    value="<?= old('kode_pos', $item['kode_pos'] ?? '') ?>">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Alamat Lengkap <span class="req">*</span></label>
+            <textarea name="alamat" class="form-control" rows="3" required
+                placeholder="Jl. Nama Jalan, No Rumah, RT/RW, Kelurahan, Kecamatan"><?= old('alamat', $item['alamat'] ?? '') ?></textarea>
+        </div>
+
+        <!-- ── Asal Sekolah ───────────────────── -->
+        <div class="form-section-title" style="margin-top:28px">🏫 Asal Sekolah</div>
+
+        <div class="form-group">
+            <label class="form-label">Asal TK / PAUD</label>
+            <input type="text" name="asal_sekolah" class="form-control"
+                placeholder="Nama TK/PAUD asal (kosong jika tidak ada)"
+                value="<?= old('asal_sekolah', $item['asal'] ?? '') ?>">
         </div>
 
         <!-- ── Status & Tanggal ───────────────── -->
@@ -109,6 +210,13 @@
                 <?php endforeach; ?>
             </select>
             </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Catatan Tambahan</label>
+            <textarea name="catatan" class="form-control" rows="3" 
+                style="height: auto; resize: vertical;"
+                placeholder="Catatan medis, prestasi, atau informasi penting lainnya..."><?= old('catatan', $item['catatan'] ?? '') ?></textarea>
         </div>
 
         <!-- ── Tombol ─────────────────────────── -->
