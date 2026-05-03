@@ -35,7 +35,7 @@ class GaleriAdmin extends BaseController
         $rules = [
             'nama'     => 'required|min_length[3]|max_length[200]',
             'kategori' => 'required',
-            'foto'     => 'uploaded[foto]|is_image[foto]|max_size[foto,20480]', // Max 20MB
+            'foto'     => 'uploaded[foto]|max_size[foto,51200]|ext_in[foto,jpg,jpeg,png,webp,mp4,webm,mov]', // Max 50MB
         ];
 
         if (! $this->validate($rules)) {

@@ -48,6 +48,7 @@ class BeritaAdmin extends BaseController
             'kategori' => 'required',
             'tanggal'  => 'required|valid_date[Y-m-d]',
             'isi'      => 'required',
+            'thumbnail' => 'permit_empty|max_size[thumbnail,51200]|ext_in[thumbnail,jpg,jpeg,png,webp,mp4,webm,mov]',
         ];
 
         if (! $this->validate($rules)) {
@@ -57,6 +58,14 @@ class BeritaAdmin extends BaseController
         }
 
         $judul = $this->request->getPost('judul');
+        $namaFile = null;
+        $file = $this->request->getFile('thumbnail');
+
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            $namaFile = $file->getRandomName();
+            // Simpan ke folder berita di web publik
+            $file->move($this->data['public_uploads_path'] . 'berita', $namaFile);
+        }
 
         $this->model->insert([
             'judul'    => $judul,
@@ -65,6 +74,7 @@ class BeritaAdmin extends BaseController
             'status'   => $this->request->getPost('status') ?: 'Draf',
             'tanggal'  => $this->request->getPost('tanggal'),
             'isi'      => $this->request->getPost('isi'),
+            'thumbnail' => $namaFile,
             'views'    => 0,
         ]);
 
@@ -94,6 +104,7 @@ class BeritaAdmin extends BaseController
             'judul'   => 'required|min_length[5]|max_length[255]',
             'tanggal' => 'required|valid_date[Y-m-d]',
             'isi'     => 'required',
+            'thumbnail' => 'permit_empty|max_size[thumbnail,51200]|ext_in[thumbnail,jpg,jpeg,png,webp,mp4,webm,mov]',
         ];
 
         if (! $this->validate($rules)) {
@@ -103,6 +114,18 @@ class BeritaAdmin extends BaseController
         }
 
         $judul = $this->request->getPost('judul');
+        $berita = $this->model->find($id);
+        $namaFile = $berita['thumbnail'];
+        $file = $this->request->getFile('thumbnail');
+
+        if ($file && $file->isValid() && !$file->hasMoved()) {
+            if (!empty($namaFile)) {
+                $oldPath = $this->data['public_uploads_path'] . 'berita/' . $namaFile;
+                if (file_exists($oldPath)) unlink($oldPath);
+            }
+            $namaFile = $file->getRandomName();
+            $file->move($this->data['public_uploads_path'] . 'berita', $namaFile);
+        }
 
         $this->model->update($id, [
             'judul'    => $judul,
@@ -111,6 +134,7 @@ class BeritaAdmin extends BaseController
             'status'   => $this->request->getPost('status'),
             'tanggal'  => $this->request->getPost('tanggal'),
             'isi'      => $this->request->getPost('isi'),
+            'thumbnail' => $namaFile,
         ]);
 
         return redirect()->to('/berita')
@@ -119,6 +143,14 @@ class BeritaAdmin extends BaseController
 
     public function hapus(int $id)
     {
+        $berita = $this->model->find($id);
+        if ($berita && !empty($berita['thumbnail'])) {
+            $filePath = $this->data['public_uploads_path'] . 'berita/' . $berita['thumbnail'];
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
+        }
+
         $this->model->delete($id);
         return redirect()->to('/berita')
             ->with('success', 'Berita berhasil dihapus.');

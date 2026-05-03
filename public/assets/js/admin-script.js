@@ -16,12 +16,12 @@ let sidebarCollapsed = false;
 ═══════════════════════════════════════ */
 const DATA = {
   berita: [
-    { id:1, judul:'Siswa SDN 56 Raih Medali Emas Olimpiade Sains', kategori:'Prestasi', status:'Terbit', tanggal:'2026-02-24', views:1240 },
-    { id:2, judul:'Wisuda & Pelepasan Kelas 6 TA 2025/2026', kategori:'Kegiatan', status:'Terbit', tanggal:'2026-02-20', views:840 },
-    { id:3, judul:'SDN 56 Raih Penghargaan Adiwiyata Provinsi', kategori:'Lingkungan', status:'Terbit', tanggal:'2026-02-15', views:620 },
-    { id:4, judul:'Implementasi Kurikulum Merdeka: Proyek P5', kategori:'Akademik', status:'Draf', tanggal:'2026-02-10', views:0 },
-    { id:5, judul:'Pameran Seni di Festival Budaya Prabumulih', kategori:'Seni Budaya', status:'Terbit', tanggal:'2026-02-05', views:450 },
-    { id:6, judul:'Kegiatan Pramuka Tingkat Ramu Selesai Dilaksanakan', kategori:'Kegiatan', status:'Draf', tanggal:'2026-01-30', views:0 },
+    { id:1, judul:'Siswa SDN 56 Raih Medali Emas Olimpiade Sains', kategori:'Prestasi', status:'Terbit', tanggal:'2026-02-24', views:1240, thumbnail: null },
+    { id:2, judul:'Wisuda & Pelepasan Kelas 6 TA 2025/2026', kategori:'Kegiatan', status:'Terbit', tanggal:'2026-02-20', views:840, thumbnail: null },
+    { id:3, judul:'SDN 56 Raih Penghargaan Adiwiyata Provinsi', kategori:'Lingkungan', status:'Terbit', tanggal:'2026-02-15', views:620, thumbnail: null },
+    { id:4, judul:'Implementasi Kurikulum Merdeka: Proyek P5', kategori:'Akademik', status:'Draf', tanggal:'2026-02-10', views:0, thumbnail: null },
+    { id:5, judul:'Pameran Seni di Festival Budaya Prabumulih', kategori:'Seni Budaya', status:'Terbit', tanggal:'2026-02-05', views:450, thumbnail: null },
+    { id:6, judul:'Kegiatan Pramuka Tingkat Ramu Selesai Dilaksanakan', kategori:'Kegiatan', status:'Draf', tanggal:'2026-01-30', views:0, thumbnail: null },
   ],
   ppdb: [
     { id:1, nama:'Muhammad Rafif Akbar',    tgl:'2026-01-15', asal:'TK Permata',   status:'Diterima', usia:7 },
@@ -256,8 +256,17 @@ function animateNum(id, target) {
 function renderBerita() {
   const tbody = document.getElementById('beritaBody');
   if (!tbody) return;
-  tbody.innerHTML = DATA.berita.map(b => `
+  tbody.innerHTML = DATA.berita.map(b => {
+    const isVideo = b.thumbnail && b.thumbnail.match(/\.(mp4|webm|mov)$/i);
+    const mediaHtml = b.thumbnail 
+      ? (isVideo 
+          ? `<video src="${b.thumbnail}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;"></video>` 
+          : `<img src="${b.thumbnail}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">`)
+      : `<div style="width:40px;height:40px;background:var(--c5);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:18px">${b.kategori === 'Prestasi' ? '🏅' : '📰'}</div>`;
+
+    return `
     <tr>
+      <td>${mediaHtml}</td>
       <td><strong>${b.judul}</strong></td>
       <td><span class="badge badge-info">${b.kategori}</span></td>
       <td><span class="badge ${b.status === 'Terbit' ? 'badge-success' : 'badge-warning'}">${b.status}</span></td>
@@ -269,7 +278,7 @@ function renderBerita() {
           <button class="btn btn-danger btn-sm btn-icon" onclick="confirmDelete('berita',${b.id})" title="Hapus">🗑️</button>
         </div>
       </td>
-    </tr>`).join('');
+    </tr>`}).join('');
 }
 
 function openBeritaModal(id = null) {
@@ -279,6 +288,9 @@ function openBeritaModal(id = null) {
   if (id) {
     const b = DATA.berita.find(x => x.id === id);
     title.textContent = 'Edit Berita';
+    const preview = document.getElementById('bPreview');
+    if (preview) { preview.innerHTML = ''; preview.style.display = 'none'; }
+
     document.getElementById('bJudul').value    = b.judul;
     document.getElementById('bKategori').value = b.kategori;
     document.getElementById('bStatus').value   = b.status;
@@ -287,6 +299,8 @@ function openBeritaModal(id = null) {
   } else {
     title.textContent = 'Tambah Berita';
     document.getElementById('formBerita').reset();
+    const preview = document.getElementById('bPreview');
+    if (preview) { preview.innerHTML = ''; preview.style.display = 'none'; }
   }
   modal.classList.add('open');
 }

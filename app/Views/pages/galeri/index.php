@@ -21,9 +21,15 @@
         <?php else: foreach ($list as $g):
             $bg  = $bgMap[$g['kategori']] ?? '#006064';
             $src = $g['file_foto'] ? $upload_url . 'galeri/' . $g['file_foto'] : null;
+            $ext = $g['file_foto'] ? pathinfo($g['file_foto'], PATHINFO_EXTENSION) : '';
+            $isVideo = in_array(strtolower($ext), ['mp4', 'webm', 'mov']);
         ?>
-        <div class="gm-item" style="position:relative;border-radius:14px;overflow:hidden;aspect-ratio:1;background:<?= $src ? "url('$src') center/cover" : $bg ?>">
-            <?php if (!$src): ?>
+        <div class="gm-item" style="position:relative;border-radius:14px;overflow:hidden;aspect-ratio:1; <?= (!$isVideo && $src) ? "background:url('$src') center/cover;" : "background:$bg;" ?>">
+            <?php if ($isVideo): ?>
+                <video src="<?= $src ?>" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"></video>
+            <?php endif; ?>
+
+            <?php if (!$src && !$isVideo): ?>
             <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px">
             <?= esc($g['emoji'] ?? '🖼️') ?>
             </div>

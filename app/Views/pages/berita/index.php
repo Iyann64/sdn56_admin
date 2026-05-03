@@ -10,15 +10,30 @@
         <table>
             <thead>
             <tr>
-                <th>Judul</th><th>Kategori</th><th>Status</th>
+                <th style="width:60px">Media</th><th>Judul</th><th>Kategori</th><th>Status</th>
                 <th>Tanggal</th><th>Dilihat</th><th>Aksi</th>
             </tr>
             </thead>
             <tbody>
             <?php if (empty($berita_list)): ?>
-            <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada berita</td></tr>
-            <?php else: foreach ($berita_list as $b): ?>
+            <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada berita</td></tr>
+            <?php else: foreach ($berita_list as $b): 
+                $ext = $b['thumbnail'] ? pathinfo($b['thumbnail'], PATHINFO_EXTENSION) : '';
+                $isVideo = in_array(strtolower($ext), ['mp4', 'webm', 'mov']);
+                $thumbUrl = $b['thumbnail'] ? $upload_url . 'berita/' . $b['thumbnail'] : null;
+            ?>
             <tr>
+                <td>
+                    <?php if ($thumbUrl): ?>
+                        <?php if ($isVideo): ?>
+                            <video src="<?= $thumbUrl ?>" muted style="width:40px; height:40px; object-fit:cover; border-radius:8px;"></video>
+                        <?php else: ?>
+                            <img src="<?= $thumbUrl ?>" style="width:40px; height:40px; object-fit:cover; border-radius:8px;">
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <div style="width:40px; height:40px; background:#f0f2f5; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:18px;">📰</div>
+                    <?php endif; ?>
+                </td>
                 <td>
                 <div style="font-weight:600;color:var(--ink);max-width:300px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
                     <?= esc($b['judul']) ?>

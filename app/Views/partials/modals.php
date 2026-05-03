@@ -8,28 +8,35 @@
         <div class="modal-close" onclick="closeModal('modalBerita')">✕</div>
         </div>
         <div class="modal-body">
-        <form id="formBerita">
-            <div class="fg"><label>Judul Berita *</label><input type="text" id="bJudul" placeholder="Judul berita..."></div>
+        <form id="formBerita" action="<?= base_url('berita/simpan') ?>" method="POST" enctype="multipart/form-data">
+            <?= csrf_field() ?>
+            <div class="fg">
+                <label>Thumbnail / Video Berita</label>
+                <input type="file" id="bThumbnail" name="thumbnail" accept="image/*,video/*" style="margin-bottom: 5px;">
+                <div id="bPreview" style="margin-top: 10px; display: none; text-align: center; background: #f8f9fa; padding: 10px; border-radius: 10px; border: 1px dashed var(--c4);"></div>
+                <small style="display:block; color:var(--gray); font-size:11px;">Format: JPG, PNG, WEBP, MP4. Maks 50MB.</small>
+            </div>
+            <div class="fg"><label>Judul Berita *</label><input type="text" name="judul" id="bJudul" placeholder="Judul berita..." required></div>
             <div class="form-grid-2">
             <div class="fg">
                 <label>Kategori</label>
-                <select id="bKategori">
+                <select name="kategori" id="bKategori">
                 <option>Prestasi</option><option>Kegiatan</option><option>Akademik</option>
                 <option>Lingkungan</option><option>Seni Budaya</option><option>Olahraga</option>
                 </select>
             </div>
             <div class="fg">
                 <label>Status</label>
-                <select id="bStatus"><option>Terbit</option><option>Draf</option></select>
+                <select name="status" id="bStatus"><option value="Terbit">Terbit</option><option value="Draf">Draf</option></select>
             </div>
             </div>
-            <div class="fg"><label>Tanggal *</label><input type="date" id="bTanggal"></div>
-            <div class="fg"><label>Isi Berita</label><textarea id="bIsi" placeholder="Tulis isi berita di sini..."></textarea></div>
+            <div class="fg"><label>Tanggal *</label><input type="date" name="tanggal" id="bTanggal" required></div>
+            <div class="fg"><label>Isi Berita</label><textarea name="isi" id="bIsi" placeholder="Tulis isi berita di sini..." required></textarea></div>
         </form>
         </div>
         <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('modalBerita')">Batal</button>
-        <button class="btn btn-primary" onclick="saveBerita()">💾 Simpan</button>
+        <button type="submit" form="formBerita" class="btn btn-primary">💾 Simpan</button>
         </div>
     </div>
     </div>
@@ -113,15 +120,15 @@
         <div class="modal-body">
         <form id="formGaleri" action="<?= base_url('galeri/upload') ?>" method="POST" enctype="multipart/form-data">
             <?= csrf_field() ?>
-            <input type="file" id="gFoto" name="foto" accept="image/*" style="display:none">
+            <input type="file" id="gFoto" name="foto" accept="image/*,video/*" style="display:none">
             <div id="uploadZone" style="border:2px dashed var(--c4);border-radius:14px;padding:32px;text-align:center;
                         background:var(--c5);margin-bottom:16px;cursor:pointer;transition:all .2s"
                 onmouseenter="this.style.borderColor='var(--c3)'"
                 onmouseleave="this.style.borderColor='var(--c4)'"
                 onclick="document.getElementById('gFoto').click()">
             <div style="font-size:40px;margin-bottom:8px">📁</div>
-            <div style="font-size:14px;font-weight:600;color:var(--c1)">Klik untuk pilih foto</div>
-            <div style="font-size:12px;color:var(--gray);margin-top:4px">PNG, JPG, WEBP — maks. 20MB</div>
+            <div style="font-size:14px;font-weight:600;color:var(--c1)">Klik untuk pilih foto atau video</div>
+            <div style="font-size:12px;color:var(--gray);margin-top:4px">PNG, JPG, WEBP, MP4 — maks. 50MB</div>
             <div id="fileName" style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600"></div>
             </div>
             <div class="fg"><label>Nama / Keterangan Foto *</label><input type="text" id="gNama" name="nama" placeholder="Deskripsi singkat foto..."></div>
