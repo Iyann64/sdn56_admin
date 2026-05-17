@@ -1,7 +1,11 @@
     <?php
     $uri         = service('uri');
-    $currentPage = $uri->getSegment(1) ?: 'dashboard';
-    $currentPath = $uri->getSegment(1) . ($uri->getSegment(2) ? '/' . $uri->getSegment(2) : '');
+    $segments    = $uri->getSegments();
+    $currentPage = $segments[0] ?? 'dashboard';
+    $currentPath = $segments[0] ?? '';
+    if (isset($segments[1])) {
+        $currentPath .= '/' . $segments[1];
+    }
     $adminUser   = $admin_user ?? ['nama' => 'Admin', 'role' => '', 'avatar' => 'A'];
 
     // Test apakah helper ter-load

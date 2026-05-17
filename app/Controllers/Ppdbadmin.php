@@ -392,6 +392,15 @@ class PpdbAdmin extends BaseController
      */
     public function export(?int $id = null, ?int $year = null)
     {
+        // Handle route /ppdb/export/0/(:num) - when URL is /ppdb/export/0/2024
+        // In this case, $id will be the year number, so we need to check
+        $segments = service('uri')->getSegments();
+        if (isset($segments[2]) && $segments[2] === '0' && isset($segments[3])) {
+            // URL is /ppdb/export/0/YEAR - swap parameters
+            $year = $id;
+            $id = 0;
+        }
+
         if ($id && $id > 0) {
             $data = $this->model->where('id', $id)->findAll();
             $filename = 'Detail_PPDB_' . url_title($data[0]['nama'] ?? 'Siswa', '_', true) . '_' . date('Ymd') . '.xls';
