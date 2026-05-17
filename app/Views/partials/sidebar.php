@@ -20,6 +20,8 @@
     ['page'=>'ppdb',     'icon'=>'✏️','label'=>'Data PPDB',           'badge'=>2, 'resource'=>'ppdb'],
     ['page'=>'ppdb/report','icon'=>'📈','label'=>'Laporan PPDB',      'badge'=>0, 'resource'=>'ppdb'],
     ['page'=>'ppdb/laporan','icon'=>'📋','label'=>'Laporan Tahunan',  'badge'=>0, 'resource'=>'ppdb'],
+    ['page'=>'ppdb/persyaratan', 'icon'=>'📄','label'=>'Syarat Dokumen',    'badge'=>0, 'resource'=>'ppdb'],
+    ['page'=>'ppdb/jadwal',   'icon'=>'📅','label'=>'Jadwal PPDB',         'badge'=>0, 'resource'=>'ppdb'],
     ['page'=>'agenda',   'icon'=>'📅','label'=>'Agenda & Kegiatan',  'badge'=>0, 'resource'=>'agenda'],
     ['page'=>'galeri',   'icon'=>'🖼️','label'=>'Galeri Foto',         'badge'=>0, 'resource'=>'galeri'],
     ['page'=>'guru',     'icon'=>'👨‍🏫','label'=>'Guru & Staf',        'badge'=>0, 'resource'=>'guru'],
