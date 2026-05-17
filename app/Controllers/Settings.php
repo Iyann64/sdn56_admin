@@ -3,14 +3,24 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
+use App\Models\PpdbConfigModel;
 
 /**
  * Settings Controller — sdn56_admin
  */
 class Settings extends BaseController
 {
+    private PpdbConfigModel $configModel;
+
+    public function __construct()
+    {
+        $this->configModel = new PpdbConfigModel();
+    }
+
     public function index(): string
     {
+        $config = $this->configModel->getConfig();
+
         return $this->render('pages/settings/index', [
             'title'     => 'Pengaturan',
             'page_icon' => '⚙️',
@@ -24,15 +34,7 @@ class Settings extends BaseController
                 'email'      => 'sdnegeri56pbm@gmail.com',
                 'alamat'     => 'Jl. Pendidikan No. 56, Prabumulih, Sumatera Selatan 31124',
             ],
-            'ppdb_config' => [
-                'tgl_buka'         => '2026-04-01',
-                'tgl_tutup'        => '2026-05-31',
-                'kuota_rombel'     => 4,
-                'kuota_per_rombel' => 28,
-                'usia_min'         => 6,
-                'usia_max'         => 7,
-                'status'           => 'Belum Dibuka',
-            ],
+            'ppdb_config' => $config,
         ]);
     }
 
@@ -83,6 +85,21 @@ class Settings extends BaseController
 
     public function simpanPpdbConfig()
     {
-        return redirect()->to('/settings')->with('success', 'Konfigurasi PPDB berhasil disimpan!');
+        $data = [
+            'status'   => $this->request->getPost('status'),
+            'tgl_buka' => $this->request->getPost('tgl_buka'),
+            'tgl_tutup'=> $this->request->getPost('tgl_tutup'),
+            'kuota'    => $this->request->getPost('kuota'),
+            'kuota_afirmasi' => $this->request->getPost('kuota_afirmasi'),
+            'kuota_mutasi'   => $this->request->getPost('kuota_mutasi'),
+            'kuota_domisili' => $this->request->getPost('kuota_domisili'),
+            'jalur_pendaftaran' => $this->request->getPost('jalur_pendaftaran'),
+            'usia_min' => $this->request->getPost('usia_min'),
+            'usia_max' => $this->request->getPost('usia_max'),
+        ];
+
+        $this->configModel->update(1, $data);
+
+        return redirect()->to('/settings')->with('success', 'Konfigurasi PPDB berhasil diperbarui!');
     }
 }

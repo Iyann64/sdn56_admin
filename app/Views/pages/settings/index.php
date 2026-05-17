@@ -77,6 +77,12 @@
             <div class="fg"><label>Kuota per Rombel</label>    <input type="number" name="kuota_per_rombel" value="<?= esc($ppdb_config['kuota_per_rombel'] ?? 28) ?>"></div>
             <div class="fg"><label>Usia Minimal (tahun)</label><input type="number" name="usia_min" value="<?= esc($ppdb_config['usia_min'] ?? 6) ?>"></div>
             <div class="fg"><label>Usia Maksimal (tahun)</label><input type="number" name="usia_max" value="<?= esc($ppdb_config['usia_max'] ?? 7) ?>"></div>
+            <div class="fg"><label>Jalur Pendaftaran</label>
+                <select name="jalur_pendaftaran">
+                    <?php foreach (['Reguler','Afirmasi','Mutasi','Domisili'] as $jp): ?>
+                    <option <?= ($ppdb_config['jalur_pendaftaran'] ?? '') === $jp ? 'selected':'' ?>><?= $jp ?></option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="fg">
             <label>Status Penerimaan</label>

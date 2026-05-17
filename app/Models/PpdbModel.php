@@ -16,9 +16,10 @@ class PpdbModel extends Model
     protected $useSoftDeletes = true;
 
     protected $allowedFields  = [
-        'nama', 'tempat_lahir', 'tgl_lahir',
-        'nama_ortu', 'telepon', 'email',
-        'asal', 'usia', 'status', 'tgl_daftar', 'catatan',
+        'nama', 'tempat_lahir', 'tgl_lahir', 'jenis_kelamin', 'agama', 'nik_siswa', 'nisn',
+        'nama_ortu', 'nik_ortu', 'telepon', 'email', 'alamat', 'kode_pos', 'hubungan', 
+        'pekerjaan_ortu', 'agama_ortu', 'kewarganegaraan', 'status_kesehatan',
+        'asal', 'jalur_pendaftaran', 'usia', 'status', 'tgl_daftar', 'catatan',
     ];
 
     protected $useTimestamps = true;
@@ -69,5 +70,80 @@ class PpdbModel extends Model
         return $this->where('status', $status)
                     ->orderBy('tgl_daftar', 'DESC')
                     ->findAll();
+    }
+
+    /**
+     * Mengambil semua data pendaftar untuk tahun tertentu.
+     */
+    public function getDataByYear(int $year): array
+    {
+        return $this->where("YEAR(tgl_daftar)", $year)
+                    ->orderBy('tgl_daftar', 'ASC')
+                    ->findAll();
+    }
+
+    /**
+     * Menghitung ringkasan statistik PPDB untuk tahun tertentu.
+     */
+    public function getYearlySummary(int $year): array
+    {
+        $summary = [
+            'total'     => 0,
+            'Diterima'  => 0,
+            'Menunggu'  => 0,
+            'Ditolak'   => 0,
+            'laki_laki' => 0,
+            'perempuan' => 0,
+            'monthly'   => array_fill(1, 12, 0),
+        ];
+
+        $data = $this->select('status, jenis_kelamin, MONTH(tgl_daftar) as month')
+                     ->where("YEAR(tgl_daftar)", $year)
+                     ->findAll();
+
+        foreach ($data as $row) {
+            $summary['total']++;
+            
+            if (isset($summary[$row['status']])) {
+                $summary[$row['status']]++;
+            }
+
+            if ($row['jenis_kelamin'] === 'Laki-laki') {
+                $summary['laki_laki']++;
+            } elseif ($row['jenis_kelamin'] === 'Perempuan') {
+                $summary['perempuan']++;
+            }
+
+            $m = (int)$row['month'];
+            if ($m >= 1 && $m <= 12) {
+                $summary['monthly'][$m]++;
+            }
+        }
+
+        return $summary;
+    }
+
+    /**
+     * Ambil daftar tahun yang tersedia di data PPDB
+     */
+    public function getAvailableYears(): array
+    {
+        $rows = $this->select('DISTINCT YEAR(tgl_daftar) as tahun')
+                     ->orderBy('tahun', 'DESC')
+                     ->findAll();
+        
+        $years = [];
+        foreach ($rows as $row) {
+            if ($row['tahun']) {
+                $years[] = (int)$row['tahun'];
+            }
+        }
+
+        // Jika kosong, tambahkan tahun saat ini
+        if (empty($years)) {
+            $years[] = (int)date('Y');
+        }
+
+        return array_values(array_unique($years));
     }
 }

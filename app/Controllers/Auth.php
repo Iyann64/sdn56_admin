@@ -22,39 +22,70 @@ class Auth extends BaseController
 
     // ─── POST /login/proses ───────────────────────────────────────
     public function proses()
-{
-    $username = trim($this->request->getPost('username'));
-    $password = $this->request->getPost('password');
+    {
+        $username = trim($this->request->getPost('username'));
+        $password = $this->request->getPost('password');
+        $isAjax   = $this->request->isAJAX();
 
-    if (empty($username) || empty($password)) {
-        return redirect()->to('/login')
-            ->with('error', 'Username dan password wajib diisi.');
+        if (empty($username) || empty($password)) {
+            $message = 'Username dan password wajib diisi.';
+            
+            if ($isAjax) {
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => $message,
+                ]);
+            }
+            
+            return redirect()->to('/login')
+                ->with('error', $message);
+        }
+
+        $userModel = new UserModel();
+        $user      = $userModel->cekLogin($username, $password);
+
+        if (! $user) {
+            sleep(1);
+            $message = 'Username atau password salah.';
+            
+            if ($isAjax) {
+                return $this->response->setJSON([
+                    'status' => 'error',
+                    'message' => $message,
+                ]);
+            }
+            
+            return redirect()->to('/login')
+                ->with('error', $message)
+                ->withInput();
+        }
+
+        session()->set([
+            'logged_in'  => true,
+            'user_id'    => $user['id'],
+            'admin_user' => [
+                'id'     => $user['id'],
+                'nama'   => $user['nama'],
+                'role'   => $user['role'],
+                'email'  => $user['email'] ?? '',
+                'avatar' => $user['avatar'] ?? strtoupper(substr($user['nama'], 0, 1)),
+            ],
+        ]);
+
+        if ($isAjax) {
+            return $this->response->setJSON([
+                'status'   => 'success',
+                'message'  => 'Login berhasil! Mengalihkan...',
+                'redirect' => base_url('/dashboard'),
+                'user'     => [
+                    'nama' => $user['nama'],
+                    'role' => $user['role'],
+                ],
+            ]);
+        }
+
+        return redirect()->to('/dashboard');
     }
-
-    $userModel = new UserModel();
-    $user      = $userModel->cekLogin($username, $password);
-
-    if (! $user) {
-        sleep(1);
-        return redirect()->to('/login')
-            ->with('error', 'Username atau password salah.')
-            ->withInput();
-    }
-
-    session()->set([
-        'logged_in'  => true,
-        'user_id'    => $user['id'],
-        'admin_user' => [
-            'id'     => $user['id'],
-            'nama'   => $user['nama'],
-            'role'   => $user['role'],
-            'email'  => $user['email'] ?? '',
-            'avatar' => $user['avatar'] ?? strtoupper(substr($user['nama'], 0, 1)),
-        ],
-    ]);
-
-    return redirect()->to('/dashboard');
-}
 
     // ─── GET /logout ──────────────────────────────────────────────
     public function logout()

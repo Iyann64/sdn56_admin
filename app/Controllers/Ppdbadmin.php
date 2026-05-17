@@ -73,6 +73,7 @@ class PpdbAdmin extends BaseController
             'alamat'          => 'required',
             'tgl_daftar'      => 'required|valid_date[Y-m-d]',
             'usia'            => 'permit_empty|integer',
+            'jalur_pendaftaran' => 'required|in_list[Afirmasi,Mutasi Kerja Orang Tua,Domisili]',
         ];
 
         if (! $this->validate($rules)) {
@@ -102,6 +103,7 @@ class PpdbAdmin extends BaseController
             'alamat'       => $this->request->getPost('alamat'),
             'kode_pos'     => $this->request->getPost('kode_pos'),
             'asal'         => $this->request->getPost('asal_sekolah') ?: '-',
+            'jalur_pendaftaran' => $this->request->getPost('jalur_pendaftaran'),
             'status'       => $this->request->getPost('status') ?: 'Menunggu',
             'tgl_daftar'   => $this->request->getPost('tgl_daftar'),
             'catatan'      => $this->request->getPost('catatan'),
@@ -143,6 +145,7 @@ class PpdbAdmin extends BaseController
             'alamat'          => 'required',
             'tgl_daftar'      => 'required|valid_date[Y-m-d]',
             'usia'            => 'permit_empty|integer',
+            'jalur_pendaftaran' => 'required|in_list[Afirmasi,Mutasi Kerja Orang Tua,Domisili]',
         ];
 
         if (! $this->validate($rules)) {
@@ -172,6 +175,7 @@ class PpdbAdmin extends BaseController
             'alamat'       => $this->request->getPost('alamat'),
             'kode_pos'     => $this->request->getPost('kode_pos'),
             'asal'         => $this->request->getPost('asal_sekolah') ?: '-',
+            'jalur_pendaftaran' => $this->request->getPost('jalur_pendaftaran'),
             'status'       => $this->request->getPost('status'),
             'tgl_daftar'   => $this->request->getPost('tgl_daftar'),
             'catatan'      => $this->request->getPost('catatan'),
@@ -204,13 +208,196 @@ class PpdbAdmin extends BaseController
     }
 
     /**
+     * Menampilkan laporan PPDB tahunan.
+     */
+    public function report(?int $year = null): string
+    {
+        $year = $year ?? (int) date('Y');
+
+        return $this->render('pages/ppdb/yearly_report', [
+            'title'     => "Laporan PPDB Tahun $year",
+            'page_icon' => '📈',
+            'year'      => $year,
+            'list'      => $this->model->getDataByYear($year),
+            'summary'   => $this->model->getYearlySummary($year),
+            'available_years' => $this->getAvailablePpdbYears(),
+        ]);
+    }
+
+    /**
+     * Cetak Laporan PPDB Tahunan (Format PDF via Browser Print)
+     */
+    public function printYearlyReport(?int $year = null)
+    {
+        $year = $year ?? (int) date('Y');
+
+        return view('pages/ppdb/report_pdf', [
+            'year'      => $year,
+            'list'      => $this->model->getDataByYear($year),
+            'summary'   => $this->model->getYearlySummary($year),
+            'logo_url'  => base_url('assets/img/logo.png'),
+        ]);
+    }
+
+    /**
+     * Mengambil daftar tahun pendaftaran yang tersedia di database.
+     */
+    private function getAvailablePpdbYears(): array
+    {
+        $years = $this->model->select("DISTINCT YEAR(tgl_daftar) as year")
+                            ->orderBy('year', 'DESC')
+                            ->findAll();
+        return array_column($years, 'year') ?: [(int)date('Y')];
+    }
+
+    /**
+     * Menampilkan daftar laporan tahunan yang sudah disimpan
+     */
+    public function daftarLaporan(): string
+    {
+        $laporanModel = new \App\Models\LaporanTahunanPpdbModel();
+        
+        return $this->render('pages/ppdb/daftar_laporan', [
+            'title'     => 'Daftar Laporan Tahunan PPDB',
+            'page_icon' => '📋',
+            'laporan'   => $laporanModel->orderBy('tahun', 'DESC')->findAll(),
+        ]);
+    }
+
+    /**
+     * Menyimpan laporan tahunan ke database (Auto-generate)
+     * Endpoint: POST /ppdb/simpan-laporan atau GET /ppdb/simpan-laporan/{tahun}
+     */
+    public function simpanLaporan(?int $tahun = null)
+    {
+        if (!hasPermission('ppdb', 'create')) {
+            return redirect()->back()
+                ->with('error', 'Anda tidak memiliki akses untuk menyimpan laporan.');
+        }
+
+        // Ambil tahun dari POST parameter jika ada, atau dari URL segment
+        $tahun = $this->request->getPost('tahun') ?: $tahun;
+        $tahun = $tahun ?? (int)date('Y');
+        $tahun = (int)$tahun;
+
+        if ($tahun < 2000 || $tahun > 2099) {
+            return redirect()->back()
+                ->with('error', 'Tahun tidak valid. Silakan pilih tahun yang benar.');
+        }
+
+        $userId = session()->get('user_id') ?? 0;
+
+        $laporanModel = new \App\Models\LaporanTahunanPpdbModel();
+        
+        // Cek apakah laporan untuk tahun ini sudah ada
+        $existing = $laporanModel->where('tahun', $tahun)->first();
+        if ($existing) {
+            return redirect()->back()
+                ->with('warning', "Laporan tahunan untuk tahun $tahun sudah ada. Silakan edit yang sudah ada.");
+        }
+
+        // Generate laporan
+        $catatan = trim($this->request->getPost('catatan') ?? '');
+        $laporanModel->generateLaporan($tahun, $userId, $catatan, 'Draft');
+
+        return redirect()->to('/ppdb/laporan')
+            ->with('success', "Laporan tahunan PPDB tahun $tahun berhasil disimpan sebagai Draft.");
+    }
+
+    /**
+     * Finalisasi laporan (ubah status dari Draft ke Final)
+     */
+    public function finalisasiLaporan(int $id)
+    {
+        if (!hasPermission('ppdb', 'edit')) {
+            return redirect()->back()
+                ->with('error', 'Anda tidak memiliki akses untuk finalisasi laporan.');
+        }
+
+        $laporanModel = new \App\Models\LaporanTahunanPpdbModel();
+        $laporan = $laporanModel->find($id);
+
+        if (!$laporan) {
+            return redirect()->back()
+                ->with('error', 'Laporan tidak ditemukan.');
+        }
+
+        $laporanModel->finalisasi($id);
+
+        return redirect()->back()
+            ->with('success', "Laporan tahunan tahun {$laporan['tahun']} berhasil difinalisasi.");
+    }
+
+    /**
+     * Arsipkan laporan
+     */
+    public function arsipkanLaporan(int $id)
+    {
+        if (!hasPermission('ppdb', 'delete')) {
+            return redirect()->back()
+                ->with('error', 'Anda tidak memiliki akses untuk mengarsipkan laporan.');
+        }
+
+        $laporanModel = new \App\Models\LaporanTahunanPpdbModel();
+        $laporan = $laporanModel->find($id);
+
+        if (!$laporan) {
+            return redirect()->back()
+                ->with('error', 'Laporan tidak ditemukan.');
+        }
+
+        $laporanModel->arsipkan($id);
+
+        return redirect()->back()
+            ->with('success', "Laporan tahunan tahun {$laporan['tahun']} berhasil diarsipkan.");
+    }
+
+    /**
+     * Menampilkan detail laporan tahunan
+     */
+    public function detailLaporan(int $id): string|\CodeIgniter\HTTP\RedirectResponse
+    {
+        $laporanModel = new \App\Models\LaporanTahunanPpdbModel();
+        $laporan = $laporanModel->find($id);
+
+        if (!$laporan) {
+            return redirect()->to('/ppdb/laporan')
+                ->with('error', 'Laporan tidak ditemukan.');
+        }
+
+        return $this->render('pages/ppdb/detail_laporan', [
+            'title'     => "Laporan Tahunan PPDB {$laporan['tahun_ajaran']}",
+            'page_icon' => '📊',
+            'laporan'   => $laporan,
+        ]);
+    }
+
+    /**
+     * Melayani request file upload PPDB agar tidak 404 saat dibuka di Admin
+     */
+    public function serveFile(string $filename)
+    {
+        $path = $this->data['public_uploads_path'] . 'ppdb/' . $filename;
+
+        if (! is_file($path)) {
+            throw \CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound("File $filename tidak ditemukan.");
+        }
+
+        // Tampilkan file (gambar/pdf) langsung di browser
+        return $this->response->download($path, null)->inline();
+    }
+
+    /**
      * Export data PPDB ke format CSV
      */
-    public function export(?int $id = null)
+    public function export(?int $id = null, ?int $year = null)
     {
-        if ($id) {
+        if ($id && $id > 0) {
             $data = $this->model->where('id', $id)->findAll();
             $filename = 'Detail_PPDB_' . url_title($data[0]['nama'] ?? 'Siswa', '_', true) . '_' . date('Ymd') . '.xls';
+        } elseif ($year) {
+            $data = $this->model->getDataByYear($year);
+            $filename = 'Laporan_PPDB_' . $year . '_' . date('Ymd_His') . '.xls';
         } else {
             $data = $this->model->orderBy('tgl_daftar', 'DESC')->findAll();
             $filename = 'Data_PPDB_SDN56_' . date('Y-m-d_His') . '.xls';
@@ -240,7 +427,7 @@ class PpdbAdmin extends BaseController
                 <td colspan="24" class="title">DATA PENDAFTARAN SISWA BARU (PPDB) SDN 56 PRABUMULIH</td>
             </tr>
             <tr>
-                <td colspan="24" class="center" style="border:none;">Tanggal Ekspor: <?= date('d/m/Y H:i') ?></td>
+                <td colspan="24" class="center" style="border:none;">Laporan Tahun: <?= $year ?? 'Semua' ?> | Tanggal Ekspor: <?= date('d/m/Y H:i') ?></td>
             </tr>
             <tr></tr> <!-- Baris Kosong -->
             <thead>
@@ -259,6 +446,7 @@ class PpdbAdmin extends BaseController
                     <th>Email</th>
                     <th>Alamat Lengkap</th>
                     <th>Asal Sekolah</th>
+                    <th>Jalur Pendaftaran</th>
                     <th>Status</th>
                     <th>Tgl Daftar</th>
                     <th>Link Akta</th>
@@ -288,6 +476,7 @@ class PpdbAdmin extends BaseController
                     <td><?= esc($row['email']) ?></td>
                     <td><?= esc($row['alamat']) ?></td>
                     <td><?= esc($row['asal']) ?></td>
+                    <td><?= esc($row['jalur_pendaftaran']) ?></td>
                     <td class="center"><?= strtoupper($row['status']) ?></td>
                     <td><?= date('d/m/Y', strtotime($row['tgl_daftar'])) ?></td>
                     

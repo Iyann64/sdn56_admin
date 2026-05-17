@@ -58,8 +58,25 @@ $routes->get( 'ppdb/edit/(:num)',            'PpdbAdmin::edit/$1',          ['fi
 $routes->post('ppdb/update/(:num)',          'PpdbAdmin::update/$1',        ['filter' => 'role:Super Admin,Operator']);
 $routes->get( 'ppdb/status/(:num)/(:alpha)', 'PpdbAdmin::ubahStatus/$1/$2', ['filter' => 'role:Super Admin,Operator']);
 $routes->get( 'ppdb/export',                 'PpdbAdmin::export',           ['filter' => 'role:Super Admin,Operator']);
-$routes->get( 'ppdb/export/(:num)',          'PpdbAdmin::export/$1',        ['filter' => 'role:Super Admin,Operator']);
+$routes->get( 'ppdb/export/(:num)',          'PpdbAdmin::export/$1',        ['filter' => 'role:Super Admin,Operator']); // Export single
+$routes->get( 'ppdb/export/0/(:num)',        'PpdbAdmin::export/0/$1',      ['filter' => 'role:Super Admin,Operator']); // Export yearly
 $routes->get( 'ppdb/hapus/(:num)',           'PpdbAdmin::hapus/$1',        ['filter' => 'role:Super Admin,Operator']);
+
+$routes->get( 'ppdb/report',                 'PpdbAdmin::report',           ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
+$routes->get( 'ppdb/report/(:num)',          'PpdbAdmin::report/$1',        ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
+$routes->get( 'ppdb/report/pdf/(:num)',      'PpdbAdmin::printYearlyReport/$1', ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
+
+// Route untuk Laporan Tahunan PPDB
+$routes->get( 'ppdb/laporan',                'PpdbAdmin::daftarLaporan',    ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
+$routes->post('ppdb/simpan-laporan',         'PpdbAdmin::simpanLaporan',    ['filter' => 'role:Super Admin,Operator']);
+$routes->get( 'ppdb/simpan-laporan/(:num)',  'PpdbAdmin::simpanLaporan/$1', ['filter' => 'role:Super Admin,Operator']);
+$routes->get( 'ppdb/detail-laporan/(:num)',  'PpdbAdmin::detailLaporan/$1', ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
+$routes->get( 'ppdb/finalisasi-laporan/(:num)', 'PpdbAdmin::finalisasiLaporan/$1', ['filter' => 'role:Super Admin,Operator']);
+$routes->get( 'ppdb/arsipkan-laporan/(:num)', 'PpdbAdmin::arsipkanLaporan/$1', ['filter' => 'role:Super Admin,Operator']);
+
+// Route untuk melayani file upload PPDB di Admin
+$routes->get('uploads/ppdb/(:any)', 'PpdbAdmin::serveFile/$1');
+
 
 
 // ══════════════════════════════════════════════
