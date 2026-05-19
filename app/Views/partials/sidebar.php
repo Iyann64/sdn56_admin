@@ -32,7 +32,7 @@
     ?>
     <aside class="sidebar" id="sidebar">
     <div class="sb-head">
-        <img class="sb-logo" src="<?= base_url('assets/img/logo.png') ?>" alt="Logo">
+        <img class="sb-logo" src="<?= base_url('assets/img/logo-website-removebg-preview.png') ?>" alt="Logo">
         <div class="sb-name">
         <strong>SDN 56 Prabumulih</strong>
         <span>Admin Panel</span>
