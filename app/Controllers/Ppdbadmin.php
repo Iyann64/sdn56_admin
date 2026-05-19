@@ -235,7 +235,7 @@ class PpdbAdmin extends BaseController
             'year'      => $year,
             'list'      => $this->model->getDataByYear($year),
             'summary'   => $this->model->getYearlySummary($year),
-            'logo_url'  => base_url('assets/img/logo.png'),
+            'logo_url'  => $this->data['logo_url'],
         ]);
     }
 

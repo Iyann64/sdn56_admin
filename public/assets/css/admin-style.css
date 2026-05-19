@@ -64,7 +64,7 @@ ul { list-style:none; }
 }
 .lb-logo-ring {
   width: 110px; height: 110px; border-radius:50%;
-  background: rgba(255,255,255,.1); border: 3px solid rgba(255,255,255,.3);
+  background: rgba(237, 223, 223, 0.959); border: 3px solid rgba(255,255,255,.3);
   display:flex; align-items:center; justify-content:center;
   margin-bottom: 28px;
   animation: float 4s ease-in-out infinite;

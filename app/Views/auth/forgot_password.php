@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lupa Password – Admin SD Negeri 56 Prabumulih</title>
-<link rel="icon" type="image/jpeg" href="<?= base_url('assets/img/logo.jpg') ?>">
+<link rel="icon" type="image/png" href="<?= $logo_url ?>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
     <!-- Left branding -->
     <div class="login-brand">
         <div class="lb-logo-ring">
-        <img src="<?= base_url('assets/img/logo.png') ?>" alt="Logo SDN 56">
+        <img src="<?= $logo_url ?>" alt="Logo SDN 56">
         </div>
         <div class="lb-title">SD Negeri 56<br>Prabumulih</div>
         <p class="lb-sub">Panel administrasi resmi untuk mengelola konten, data PPDB, agenda, dan informasi sekolah secara terpusat.</p>
