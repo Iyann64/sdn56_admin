@@ -71,15 +71,15 @@
     <div class="modal-overlay" id="modalGaleri">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="modalGaleriTitle">Upload Foto</h3>
+                <h3 id="modalGaleriTitle" class="modal-title">Upload Foto</h3>
                 <button class="modal-close" onclick="closeModal('modalGaleri')">✕</button>
             </div>
             <div class="modal-body">
                 <form id="formGaleri" 
-                      method="POST" 
-                      enctype="multipart/form-data"
-                      data-upload="<?= base_url('galeri/upload') ?>"
-                      data-update="<?= base_url('galeri/update') ?>">
+                    method="POST" 
+                    enctype="multipart/form-data"
+                    data-upload="<?= base_url('galeri/upload') ?>"
+                    data-update="<?= base_url('galeri/update') ?>">
                     
                     <?= csrf_field() ?>
                     <input type="file" id="gFoto" name="foto" accept="image/*,video/*" style="display:none">
