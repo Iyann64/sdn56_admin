@@ -104,6 +104,7 @@ $routes->get( 'agenda/hapus/(:num)',  'AgendaAdmin::hapus/$1',         ['filter'
 // ══════════════════════════════════════════════
 $routes->get( 'galeri',              'GaleriAdmin::index',     ['filter' => 'role:Super Admin,Kepala Sekolah,Operator']);
 $routes->post('galeri/upload',       'GaleriAdmin::upload',    ['filter' => 'role:Super Admin,Operator']);
+$routes->post('galeri/update/(:num)', 'GaleriAdmin::update/$1',  ['filter' => 'role:Super Admin,Operator']);
 $routes->get( 'galeri/hapus/(:num)', 'GaleriAdmin::hapus/$1',  ['filter' => 'role:Super Admin,Operator']);
 
 

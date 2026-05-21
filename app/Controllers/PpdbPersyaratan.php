@@ -26,14 +26,12 @@ class PpdbPersyaratan extends BaseController
     {
         $ids = (array) ($this->request->getPost('id') ?? []);
         $nama = (array) ($this->request->getPost('nama') ?? []);
-        $keterangan = (array) ($this->request->getPost('keterangan') ?? []);
         $wajib = $this->request->getPost('wajib') ?? [];
         $aktif = $this->request->getPost('aktif') ?? [];
 
         foreach ($ids as $id) {
             $this->dokumenModel->update($id, [
                 'nama'       => isset($nama[$id]) ? $nama[$id] : '',
-                'keterangan' => isset($keterangan[$id]) ? $keterangan[$id] : '',
                 'wajib'      => in_array($id, $wajib) ? 1 : 0,
                 'aktif'      => in_array($id, $aktif) ? 1 : 0
             ]);

@@ -192,6 +192,16 @@
 
         <!-- ── Status & Tanggal ───────────────── -->
         <div class="form-section-title" style="margin-top:28px">📋 Status Pendaftaran</div>
+        <div>
+            <label class="form-label">Jalur Pendaftaran</label>
+            <select name="jalur_pendaftaran" class="form-control">
+                <option value="">Pilih Jalur</option>
+                <option value="Zonasi">Zonasi</option>
+                <option value="Afirmasi">Afirmasi</option>
+                <option value="Prestasi">Prestasi</option>
+                <option value="Perpindahan Tugas Orang Tua">Perpindahan Tugas Orang Tua</option>
+            </select>
+        </div>
 
         <div class="form-row">
             <div class="form-group">

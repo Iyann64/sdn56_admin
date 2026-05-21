@@ -49,18 +49,19 @@
         <div class="modal-close" onclick="closeModal('modalPPDB')">✕</div>
         </div>
         <div class="modal-body">
-        <form id="formPPDB">
-            <div class="fg"><label>Nama Lengkap *</label><input type="text" id="pNama" placeholder="Nama calon siswa"></div>
+        <form id="formPPDB" action="<?= base_url('ppdb/simpan') ?>" method="POST">
+            <?= csrf_field() ?>
+            <div class="fg"><label>Nama Lengkap *</label><input type="text" id="pNama" name="nama_lengkap" placeholder="Nama calon siswa" required></div>
             <div class="form-grid-2">
-            <div class="fg"><label>Tanggal Daftar *</label><input type="date" id="pTgl"></div>
-            <div class="fg"><label>Usia (tahun)</label><input type="number" id="pUsia" value="6" min="5" max="8"></div>
+            <div class="fg"><label>Tanggal Daftar *</label><input type="date" id="pTgl" name="tgl_daftar" required></div>
+            <div class="fg"><label>Usia (tahun)</label><input type="number" id="pUsia" name="usia" value="6" min="5" max="8"></div>
             </div>
-            <div class="fg"><label>Asal Sekolah / TK</label><input type="text" id="pAsal" placeholder="Nama TK / PAUD asal"></div>
+            <div class="fg"><label>Asal Sekolah / TK</label><input type="text" id="pAsal" name="asal_sekolah" placeholder="Nama TK / PAUD asal"></div>
         </form>
         </div>
         <div class="modal-footer">
         <button class="btn btn-outline" onclick="closeModal('modalPPDB')">Batal</button>
-        <button class="btn btn-primary" onclick="savePPDB()">💾 Simpan</button>
+        <button type="submit" form="formPPDB" class="btn btn-primary">💾 Simpan</button>
         </div>
     </div>
     </div>

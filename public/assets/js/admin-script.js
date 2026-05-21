@@ -207,7 +207,7 @@ function goPage(name) {
     berita:  renderBerita,
     ppdb:    renderPPDB,
     agenda:  renderAgenda,
-    galeri:  renderGaleri,
+    // galeri:  renderGaleri, // Dinonaktifkan agar tidak menimpa data asli dari database
     guru:    renderGuru,
   };
   if (renderers[name]) renderers[name]();
@@ -472,35 +472,53 @@ function renderGaleri() {
   const grid = document.getElementById('galeriGrid');
   if (!grid) return;
   grid.innerHTML = DATA.galeri.map(g => `
-    <div class="gm-card">
-      <div class="gm-thumb" style="${GALLERY_COLORS[g.kategori]||'background:var(--c1)'}">
-        <span>${g.emoji}</span>
-      </div>
+    <div class="gm-item" style="${GALLERY_COLORS[g.kategori]||'background:var(--c1)'}">
+      <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:40px">${g.emoji}</div>
       <div class="gm-overlay">
-        <div class="gm-name">${g.nama}</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">${g.kategori}</div>
+        <div style="flex:1">
+          <div class="gm-name">${g.nama}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">${g.kategori}</div>
+        </div>
         <div class="gm-actions">
-          <div class="gm-btn" onclick="event.stopPropagation();openGaleriModal(${g.id})" title="Edit">✏️</div>
-          <div class="gm-btn" onclick="event.stopPropagation();confirmDelete('galeri',${g.id})" title="Hapus">🗑️</div>
+          <button class="gm-btn edit" onclick="event.stopPropagation();openGaleriModal(${g.id}, '${g.nama}', '${g.kategori}', '${g.emoji}')" title="Edit">✏️</button>
+          <a class="gm-btn delete" href="#" onclick="event.stopPropagation();confirmDelete('galeri',${g.id})" title="Hapus">🗑️</a>
         </div>
       </div>
     </div>`).join('');
 }
 
-function openGaleriModal(id = null) {
-  editingId = id;
-  document.getElementById('modalGaleriTitle').textContent = id ? 'Edit Foto' : 'Upload Foto';
-  if (id) {
-    const g = DATA.galeri.find(x => x.id === id);
-    document.getElementById('gNama').value     = g.nama;
-    document.getElementById('gKategori').value = g.kategori;
-    document.getElementById('gEmoji').value    = g.emoji;
-  } else {
-    document.getElementById('formGaleri').reset();
-    document.getElementById('fileName').textContent = '';
-  }
-  document.getElementById('modalGaleri').classList.add('open');
+function openGaleriModal(id = '', nama = '', kategori = '', emoji = '')
+{
+    const form = document.getElementById('formGaleri');
+    const modal = document.getElementById('modalGaleri');
+    if (!form || !modal) return;
+
+    const uploadUrl = form.dataset.upload;
+    const updateUrl = form.dataset.update;
+
+    if (id && !updateUrl) {
+        console.error("Atribut data-update tidak ditemukan pada formGaleri!");
+        return showToast('error', 'Konfigurasi URL Update bermasalah.');
+    }
+
+    document.getElementById('modalGaleriTitle').textContent =
+        id ? 'Edit Foto' : 'Upload Foto';
+
+    if (id) {
+        form.action = updateUrl + '/' + id;
+        
+        document.getElementById('gNama').value = nama;
+        document.getElementById('gKategori').value = kategori;
+        document.getElementById('gEmoji').value = emoji;
+    } else {
+        form.action = uploadUrl;
+        form.reset();
+        const fileName = document.getElementById('fileName');
+        if (fileName) fileName.textContent = '';
+    }
+    modal.classList.add('open');
 }
+
 
 // Handle file selection
 document.addEventListener('DOMContentLoaded', function() {
