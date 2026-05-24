@@ -8,7 +8,7 @@
 /**
  * Cek apakah user role memiliki akses ke action tertentu
  * 
- * @param string $resource Nama resource (berita, ppdb, agenda, galeri, guru, settings)
+ * @param string $resource Nama resource (berita, ppdb, ppdb_report, ppdb_laporan, agenda, galeri, guru, settings)
  * @param string $action Nama action (view, create, edit, delete)
  * @return bool
  */
@@ -30,20 +30,26 @@ function hasPermission(string $resource, string $action = 'view'): bool
         // Kepala Sekolah
         'Kepala Sekolah' => [
             'berita' => ['view'],
-            'agenda' => ['view'],
-            'galeri' => ['view'],
-            'ppdb' => ['view'], // Only view, no edit/delete
+            'agenda' => [],
+            'galeri' => [],
+            'ppdb' => [],
+            'ppdb_report' => ['view'],
+            'ppdb_laporan' => ['view'],
+            'ppdb_konten' => [],
             'guru' => ['view'],
             'settings' => [], // No access
             'dashboard' => ['view'],
         ],
         // Operator
         'Operator' => [
-            'berita' => ['view', 'create', 'edit', 'delete'],
-            'ppdb' => ['view', 'create', 'edit', 'delete'],
-            'agenda' => ['view', 'create', 'edit', 'delete'],
-            'galeri' => ['view', 'create', 'edit', 'delete'],
-            'guru' => ['view', 'create', 'edit', 'delete'],
+            'berita' => ['view', 'create'],
+            'ppdb' => ['view', 'create'],
+            'ppdb_report' => ['view'],
+            'ppdb_laporan' => ['view', 'create'],
+            'ppdb_konten' => ['view'],
+            'agenda' => ['view', 'create'],
+            'galeri' => ['view', 'create'],
+            'guru' => ['view', 'create'],
             'settings' => [], // No access
             'dashboard' => ['view'],
         ],

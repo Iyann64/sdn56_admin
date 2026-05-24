@@ -270,7 +270,7 @@ class PpdbAdmin extends BaseController
      */
     public function simpanLaporan(?int $tahun = null)
     {
-        if (!hasPermission('ppdb', 'create')) {
+        if (!hasPermission('ppdb_laporan', 'create')) {
             return redirect()->back()
                 ->with('error', 'Anda tidak memiliki akses untuk menyimpan laporan.');
         }
@@ -309,7 +309,7 @@ class PpdbAdmin extends BaseController
      */
     public function finalisasiLaporan(int $id)
     {
-        if (!hasPermission('ppdb', 'edit')) {
+        if (!hasPermission('ppdb_laporan', 'edit')) {
             return redirect()->back()
                 ->with('error', 'Anda tidak memiliki akses untuk finalisasi laporan.');
         }
@@ -333,7 +333,7 @@ class PpdbAdmin extends BaseController
      */
     public function arsipkanLaporan(int $id)
     {
-        if (!hasPermission('ppdb', 'delete')) {
+        if (!hasPermission('ppdb_laporan', 'delete')) {
             return redirect()->back()
                 ->with('error', 'Anda tidak memiliki akses untuk mengarsipkan laporan.');
         }
@@ -402,7 +402,7 @@ class PpdbAdmin extends BaseController
         }
 
         if ($id && $id > 0) {
-            $data = $this->model->where('id', $id)->findAll();
+            $data = $this->model->where('id_ppdb', $id)->findAll();
             $filename = 'Detail_PPDB_' . url_title($data[0]['nama'] ?? 'Siswa', '_', true) . '_' . date('Ymd') . '.xls';
         } elseif ($year) {
             $data = $this->model->getDataByYear($year);
@@ -471,7 +471,7 @@ class PpdbAdmin extends BaseController
             <tbody>
                 <?php foreach ($data as $row): ?>
                 <tr>
-                    <td class="center"><?= $row['id'] ?></td>
+                    <td class="center"><?= $row['id_ppdb'] ?></td>
                     <td><?= esc($row['nama']) ?></td>
                     <td class="text"><?= esc($row['nik_siswa']) ?></td>
                     <td class="text"><?= esc($row['nisn'] ?: '-') ?></td>

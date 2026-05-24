@@ -71,23 +71,11 @@
         <form action="<?= base_url('settings/ppdb-config') ?>" method="POST">
             <?= csrf_field() ?>
             <div class="form-grid-2">
-            <div class="fg"><label>Tanggal Buka</label>        <input type="date" name="tgl_buka"  value="<?= esc($ppdb_config['tgl_buka'] ?? '') ?>"></div>
-            <div class="fg"><label>Tanggal Tutup</label>       <input type="date" name="tgl_tutup" value="<?= esc($ppdb_config['tgl_tutup'] ?? '') ?>"></div>
-            <div class="fg"><label>Total Kuota Umum</label>    <input type="number" name="kuota" value="<?= esc($ppdb_config['kuota'] ?? 0) ?>"></div>
-            <div class="fg"><label>Kuota Jalur Afirmasi</label><input type="number" name="kuota_afirmasi" value="<?= esc($ppdb_config['kuota_afirmasi'] ?? 0) ?>"></div>
-            <div class="fg"><label>Kuota Jalur Mutasi</label>  <input type="number" name="kuota_mutasi" value="<?= esc($ppdb_config['kuota_mutasi'] ?? 0) ?>"></div>
-            <div class="fg"><label>Kuota Jalur Domisili</label><input type="number" name="kuota_domisili" value="<?= esc($ppdb_config['kuota_domisili'] ?? 0) ?>"></div>
+            <div class="fg"><label>Tanggal Buka</label>        <input type="text" name="tgl_buka"  value="<?= esc($ppdb_config['tgl_buka'] ?? '') ?>"></div>
+            <div class="fg"><label>Tanggal Tutup</label>       <input type="text" name="tgl_tutup" value="<?= esc($ppdb_config['tgl_tutup'] ?? '') ?>"></div>
+            <div class="fg"><label>Total Kuota</label>         <input type="text" name="kuota" value="<?= esc($ppdb_config['kuota'] ?? '') ?>"></div>
             <div class="fg"><label>Usia Minimal (tahun)</label><input type="number" name="usia_min" value="<?= esc($ppdb_config['usia_min'] ?? 6) ?>"></div>
             <div class="fg"><label>Usia Maksimal (tahun)</label><input type="number" name="usia_max" value="<?= esc($ppdb_config['usia_max'] ?? 7) ?>"></div>
-            <div>
-            <label>Jalur Pendaftaran</label>
-            <select name="jalur">
-                <?php foreach (['Afirmasi','Mutasi','Domisili'] as $j): ?>
-                <option <?= ($ppdb_config['jalur'] ?? '') === $j ? 'selected':'' ?>><?= $j ?></option>
-                <?php endforeach; ?>
-            </select>
-            </div>
-            
             <div class="fg">
             <label>Status Penerimaan</label>
             <select name="status">

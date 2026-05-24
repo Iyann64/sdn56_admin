@@ -1,7 +1,7 @@
     <?php
     $item   = $item ?? null;
     $isEdit = $item !== null;
-    $action = $isEdit ? base_url('guru/update/'.$item['id']) : base_url('guru/simpan');
+    $action = $isEdit ? base_url('guru/update/'.$item['nip']) : base_url('guru/simpan');
     ?>
     <div style="margin-bottom:20px">
     <a href="<?= base_url('guru') ?>" class="btn btn-outline">← Kembali</a>

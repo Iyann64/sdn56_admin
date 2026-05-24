@@ -9,7 +9,7 @@ class CreatePpdbLaporanTahunanTable extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id' => [
+            'id_ppdb_laporan_tahunan' => [
                 'type'           => 'INT',
                 'constraint'     => 11,
                 'unsigned'       => true,
@@ -93,7 +93,7 @@ class CreatePpdbLaporanTahunanTable extends Migration
             ],
         ]);
 
-        $this->forge->addKey('id', true);
+        $this->forge->addKey('id_ppdb_laporan_tahunan', true);
         $this->forge->addKey('tahun_ajaran');
         $this->forge->addKey('tahun');
         $this->forge->addKey('status');

@@ -12,7 +12,7 @@ use CodeIgniter\Model;
 class LaporanTahunanPpdbModel extends Model
 {
     protected $table          = 'ppdb_laporan_tahunan';
-    protected $primaryKey     = 'id';
+    protected $primaryKey     = 'id_ppdb_laporan_tahunan';
     protected $returnType     = 'array';
     protected $useSoftDeletes = true;
 

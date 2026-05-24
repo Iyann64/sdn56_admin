@@ -70,13 +70,13 @@
                 </td>
                 <td>
                 <div style="display:flex;gap:4px;flex-wrap:wrap">
-                    <a href="<?= base_url('ppdb/detail/'.$p['id']) ?>" class="btn btn-sm" style="background:var(--c5);color:var(--c1)" title="Cek Kelengkapan">👁️</a>
+                    <a href="<?= base_url('ppdb/detail/'.$p['id_ppdb']) ?>" class="btn btn-sm" style="background:var(--c5);color:var(--c1)" title="Cek Kelengkapan">👁️</a>
                     <?php if (hasPermission('ppdb', 'edit')): ?>
-                    <a href="<?= base_url('ppdb/status/'.$p['id'].'/Diterima') ?>" class="btn btn-sm" style="background:#E8F5E9;color:#2E7D32">✅</a>
-                    <a href="<?= base_url('ppdb/status/'.$p['id'].'/Ditolak') ?>"  class="btn btn-sm" style="background:#FFEBEE;color:#C62828">❌</a>
+                    <a href="<?= base_url('ppdb/status/'.$p['id_ppdb'].'/Diterima') ?>" class="btn btn-sm" style="background:#E8F5E9;color:#2E7D32">✅</a>
+                    <a href="<?= base_url('ppdb/status/'.$p['id_ppdb'].'/Ditolak') ?>"  class="btn btn-sm" style="background:#FFEBEE;color:#C62828">❌</a>
                     <?php endif; ?>
                     <?php if (hasPermission('ppdb', 'delete')): ?>
-                    <a href="<?= base_url('ppdb/hapus/'.$p['id']) ?>" class="btn btn-danger btn-sm"
+                    <a href="<?= base_url('ppdb/hapus/'.$p['id_ppdb']) ?>" class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus data ini?')">🗑️</a>
                     <?php endif; ?>
                 </div>

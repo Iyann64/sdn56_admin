@@ -7,9 +7,10 @@ use CodeIgniter\Model;
 class GuruModel extends Model
 {
     protected $table          = 'guru';
-    protected $primaryKey     = 'id';
+    protected $primaryKey     = 'nip';
     protected $returnType     = 'array';
     protected $useSoftDeletes = true;
+    protected $useAutoIncrement = true;
 
     protected $allowedFields  = [
         'nama', 'nip', 'jabatan', 'mapel', 'status', 'avatar',

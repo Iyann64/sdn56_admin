@@ -130,8 +130,8 @@ $availableYears = $available_years ?? [];
                     </td>
                     <td class="no-print">
                         <div style="display:flex;gap:4px;">
-                            <a href="<?= base_url('ppdb/detail/'.$p['id']) ?>" class="btn btn-sm" style="background:var(--c5);color:var(--c1)">👁️</a>
-                            <a href="<?= base_url('ppdb/export/'.$p['id']) ?>" class="btn btn-sm" style="background:#E3F2FD;color:#1565C0">📥</a>
+                            <a href="<?= base_url('ppdb/detail/'.$p['id_ppdb']) ?>" class="btn btn-sm" style="background:var(--c5);color:var(--c1)">👁️</a>
+                            <a href="<?= base_url('ppdb/export/'.$p['id_ppdb']) ?>" class="btn btn-sm" style="background:#E3F2FD;color:#1565C0">📥</a>
                         </div>
                     </td>
                 </tr>

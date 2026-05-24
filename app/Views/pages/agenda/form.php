@@ -1,7 +1,7 @@
     <?php
     $item   = $item ?? null;
     $isEdit = $item !== null;
-    $action = $isEdit ? base_url('agenda/update/'.$item['id']) : base_url('agenda/simpan');
+    $action = $isEdit ? base_url('agenda/update/'.$item['id_agenda']) : base_url('agenda/simpan');
     ?>
     <div style="margin-bottom:20px">
     <a href="<?= base_url('agenda') ?>" class="btn btn-outline">← Kembali</a>

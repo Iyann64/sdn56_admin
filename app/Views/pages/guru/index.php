@@ -36,10 +36,10 @@
                 <td>
                 <div style="display:flex;gap:6px">
                     <?php if (hasPermission('guru', 'edit')): ?>
-                    <a href="<?= base_url('guru/edit/'.$g['id']) ?>" class="btn btn-outline btn-sm">✏️ Edit</a>
+                    <a href="<?= base_url('guru/edit/'.$g['nip']) ?>" class="btn btn-outline btn-sm">✏️ Edit</a>
                     <?php endif; ?>
                     <?php if (hasPermission('guru', 'delete')): ?>
-                    <a href="<?= base_url('guru/hapus/'.$g['id']) ?>" class="btn btn-danger btn-sm"
+                    <a href="<?= base_url('guru/hapus/'.$g['nip']) ?>" class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus data guru ini?')">🗑️</a>
                     <?php endif; ?>
                 </div>

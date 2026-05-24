@@ -11,7 +11,7 @@ use CodeIgniter\Model;
 class PpdbModel extends Model
 {
     protected $table          = 'ppdb';
-    protected $primaryKey     = 'id';
+    protected $primaryKey     = 'id_ppdb';
     protected $returnType     = 'array';
     protected $useSoftDeletes = true;
 

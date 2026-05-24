@@ -6,17 +6,17 @@
     </a>
     
     <div style="display:flex; gap:10px;">
-        <a href="<?= base_url('ppdb/export/'.$item['id']) ?>" 
+        <a href="<?= base_url('ppdb/export/'.$item['id_ppdb']) ?>" 
            class="btn" style="background:#E3F2FD; color:#1565C0; border:1px solid #BBDEFB; padding:10px 20px; border-radius:10px; text-decoration:none; font-size:13px; font-weight:700;">📥 Export Data</a>
            
         <?php if (hasPermission('ppdb', 'edit')): ?>
             <?php if ($item['status'] !== 'Diterima'): ?>
-                <a href="<?= base_url('ppdb/status/'.$item['id'].'/Diterima') ?>" 
+                <a href="<?= base_url('ppdb/status/'.$item['id_ppdb'].'/Diterima') ?>" 
                    class="btn" style="background:var(--success); color:white; padding:10px 20px; border-radius:10px; text-decoration:none; font-size:13px; font-weight:700;">✅ Terima Siswa</a>
             <?php endif; ?>
             
             <?php if ($item['status'] !== 'Ditolak'): ?>
-                <a href="<?= base_url('ppdb/status/'.$item['id'].'/Ditolak') ?>" 
+                <a href="<?= base_url('ppdb/status/'.$item['id_ppdb'].'/Ditolak') ?>" 
                    class="btn" style="background:var(--danger); color:white; padding:10px 20px; border-radius:10px; text-decoration:none; font-size:13px; font-weight:700;">❌ Tolak</a>
             <?php endif; ?>
         <?php endif; ?>

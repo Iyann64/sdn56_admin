@@ -45,7 +45,7 @@ class GuruAdmin extends BaseController
     {
         $rules = [
             'nama'    => 'required|min_length[3]|max_length[150]',
-            'nip'     => 'required|max_length[20]|is_unique[guru.nip]',
+            'nip'     => 'permit_empty|numeric|is_unique[guru.nip]',
             'jabatan' => 'required|max_length[100]',
         ];
 
@@ -59,22 +59,30 @@ class GuruAdmin extends BaseController
                 ->withInput();
         }
 
-        $this->model->insert([
+        $data = [
             'nama'    => $this->request->getPost('nama'),
-            'nip'     => $this->request->getPost('nip'),
             'jabatan' => $this->request->getPost('jabatan'),
             'mapel'   => $this->request->getPost('mapel'),
             'status'  => $this->request->getPost('status') ?: 'Aktif',
             'avatar'  => $this->request->getPost('avatar') ?: '👨‍🏫',
-        ]);
+        ];
+
+        // Jika NIP diisi, gunakan NIP tersebut. 
+        // Jika kosong, biarkan database memberikan nilai Auto Increment.
+        $nipManual = $this->request->getPost('nip');
+        if (!empty($nipManual)) {
+            $data['nip'] = $nipManual;
+        }
+
+        $this->model->insert($data);
 
         return redirect()->to('/guru')
             ->with('success', 'Data guru berhasil ditambahkan!');
     }
 
-    public function edit(int $id): string|\CodeIgniter\HTTP\RedirectResponse
+    public function edit(string $nip): string|\CodeIgniter\HTTP\RedirectResponse
     {
-        $item = $this->model->find($id);
+        $item = $this->model->find($nip);
 
         if (! $item) {
             return redirect()->to('/guru')
@@ -88,11 +96,11 @@ class GuruAdmin extends BaseController
         ]);
     }
 
-    public function update(int $id)
+    public function update(string $nip)
     {
         $rules = [
             'nama'    => 'required|min_length[3]|max_length[150]',
-            'nip'     => "required|max_length[20]|is_unique[guru.nip,id,$id]",
+            'nip'     => "required|max_length[20]|is_unique[guru.nip,nip,$nip]",
             'jabatan' => 'required|max_length[100]',
         ];
 
@@ -101,12 +109,12 @@ class GuruAdmin extends BaseController
         ];
 
         if (! $this->validate($rules, $messages)) {
-            return redirect()->to("/guru/edit/$id")
+            return redirect()->to("/guru/edit/$nip")
                 ->with('error', implode('<br>', $this->validator->getErrors()))
                 ->withInput();
         }
 
-        $this->model->update($id, [
+        $this->model->update($nip, [
             'nama'    => $this->request->getPost('nama'),
             'nip'     => $this->request->getPost('nip'),
             'jabatan' => $this->request->getPost('jabatan'),
@@ -119,9 +127,9 @@ class GuruAdmin extends BaseController
             ->with('success', 'Data guru berhasil diperbarui!');
     }
 
-    public function hapus(int $id)
+    public function hapus(string $nip)
     {
-        $this->model->delete($id);
+        $this->model->delete($nip);
         return redirect()->to('/guru')
             ->with('success', 'Data guru berhasil dihapus.');
     }

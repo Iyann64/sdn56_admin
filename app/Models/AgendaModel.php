@@ -11,7 +11,7 @@ use CodeIgniter\Model;
 class AgendaModel extends Model
 {
     protected $table          = 'agenda';
-    protected $primaryKey     = 'id';
+    protected $primaryKey     = 'id_agenda';
     protected $returnType     = 'array';
     protected $useSoftDeletes = true;
 

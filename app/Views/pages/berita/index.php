@@ -50,10 +50,10 @@
                 <td>
                 <div style="display:flex;gap:6px">
                     <?php if (hasPermission('berita', 'edit')): ?>
-                    <a href="<?= base_url('berita/edit/'.$b['id']) ?>" class="btn btn-outline btn-sm">✏️ Edit</a>
+                    <a href="<?= base_url('berita/edit/'.$b['id_berita']) ?>" class="btn btn-outline btn-sm">✏️ Edit</a>
                     <?php endif; ?>
                     <?php if (hasPermission('berita', 'delete')): ?>
-                    <a href="<?= base_url('berita/hapus/'.$b['id']) ?>"
+                    <a href="<?= base_url('berita/hapus/'.$b['id_berita']) ?>"
                     class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus berita ini?')">🗑️</a>
                     <?php endif; ?>

@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class PpdbJadwalModel extends Model
 {
     protected $table            = 'ppdb_jadwal';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'id_ppdb_jadwal';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $allowedFields    = ['jalur', 'tgl_mulai', 'tgl_akhir', 'keterangan', 'aktif'];

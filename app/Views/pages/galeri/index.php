@@ -43,7 +43,7 @@
             <?php if (hasPermission('galeri', 'edit')): ?>
             <button class="gm-btn edit"
                 onclick='openGaleriModal(
-<?= (int)$g['id'] ?>,
+<?= (int)$g['id_galeri'] ?>,
 <?= json_encode($g['nama']) ?>,
 <?= json_encode($g['kategori']) ?>,
 <?= json_encode($g['emoji']) ?>
@@ -53,7 +53,7 @@
             </button>
             <?php endif; ?>
             <?php if (hasPermission('galeri', 'delete')): ?>
-            <a href="<?= base_url('galeri/hapus/'.$g['id']) ?>" class="gm-btn delete"
+            <a href="<?= base_url('galeri/hapus/'.$g['id_galeri']) ?>" class="gm-btn delete"
                 onclick="return confirm('Hapus foto ini?')">
                 🗑️
             </a>

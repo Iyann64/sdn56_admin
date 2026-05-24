@@ -1,7 +1,7 @@
     <?php
     $berita  = $berita ?? null;
     $isEdit  = $berita !== null;
-    $action  = $isEdit ? base_url('berita/update/'.$berita['id']) : base_url('berita/simpan');
+    $action  = $isEdit ? base_url('berita/update/'.$berita['id_berita']) : base_url('berita/simpan');
     ?>
     <div style="margin-bottom:20px">
     <a href="<?= base_url('berita') ?>" class="btn btn-outline">← Kembali</a>

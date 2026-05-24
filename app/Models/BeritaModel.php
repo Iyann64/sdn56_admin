@@ -11,7 +11,7 @@ use CodeIgniter\Model;
 class BeritaModel extends Model
 {
     protected $table          = 'berita';
-    protected $primaryKey     = 'id';
+    protected $primaryKey     = 'id_berita';
     protected $returnType     = 'array';
     protected $useSoftDeletes = true;
 
@@ -63,7 +63,7 @@ class BeritaModel extends Model
     public function tambahViews(int $id): void
     {
         $this->set('views', 'views + 1', false)
-            ->where('id', $id)->update();
+            ->where($this->primaryKey, $id)->update();
     }
 
     // ── Generate slug unik ────────────────────────────────────

@@ -90,15 +90,16 @@ class Settings extends BaseController
             'tgl_buka' => $this->request->getPost('tgl_buka'),
             'tgl_tutup'=> $this->request->getPost('tgl_tutup'),
             'kuota'    => $this->request->getPost('kuota'),
-            'kuota_afirmasi' => $this->request->getPost('kuota_afirmasi'),
-            'kuota_mutasi'   => $this->request->getPost('kuota_mutasi'),
-            'kuota_domisili' => $this->request->getPost('kuota_domisili'),
-            'jalur_pendaftaran' => $this->request->getPost('jalur_pendaftaran'),
             'usia_min' => $this->request->getPost('usia_min'),
             'usia_max' => $this->request->getPost('usia_max'),
         ];
 
-        $this->configModel->update(1, $data);
+        $this->configModel->where('kunci', 'status')->set(['nilai' => $data['status']])->update();
+        $this->configModel->where('kunci', 'tgl_buka')->set(['nilai' => $data['tgl_buka']])->update();
+        $this->configModel->where('kunci', 'tgl_tutup')->set(['nilai' => $data['tgl_tutup']])->update();
+        $this->configModel->where('kunci', 'kuota')->set(['nilai' => $data['kuota']])->update();
+        $this->configModel->where('kunci', 'usia_min')->set(['nilai' => $data['usia_min']])->update();
+        $this->configModel->where('kunci', 'usia_max')->set(['nilai' => $data['usia_max']])->update();
 
         return redirect()->to('/settings')->with('success', 'Konfigurasi PPDB berhasil diperbarui!');
     }

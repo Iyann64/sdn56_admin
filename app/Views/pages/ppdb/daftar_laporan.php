@@ -6,11 +6,12 @@
 ?>
 
 <div style="margin-bottom:24px; display:flex; justify-content:space-between; align-items:center;">
-    <a href="<?= base_url('ppdb') ?>" 
+    <a href="<?= canAccess('ppdb') ? base_url('ppdb') : base_url('ppdb/report') ?>" 
        style="display:inline-flex; align-items:center; gap:8px; padding:10px 18px; border-radius:10px; background:var(--white); color:var(--ink); font-size:13px; font-weight:700; text-decoration:none; border:1.5px solid var(--c4); transition:all .2s;">
        ← Kembali ke PPDB
     </a>
 
+    <?php if (hasPermission('ppdb_laporan', 'create')): ?>
     <div style="display:flex; gap:12px; align-items:center;">
         <form method="POST" action="<?= base_url('ppdb/simpan-laporan') ?>" style="display:flex; gap:12px; align-items:center;">
             <?= csrf_field() ?>
@@ -34,6 +35,7 @@
             </button>
         </form>
     </div>
+    <?php endif; ?>
 </div>
 <!-- Alert Messages -->
 <?php if (session()->has('success')): ?>
@@ -116,21 +118,21 @@
                             </td>
                             <td style="padding:15px;">
                                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                                    <a href="<?= base_url('ppdb/detail-laporan/'.$l['id']) ?>" 
+                                    <a href="<?= base_url('ppdb/detail-laporan/'.$l['id_ppdb_laporan_tahunan']) ?>" 
                                        class="btn" style="padding:6px 12px; border-radius:6px; background:#E3F2FD; color:#1565C0; text-decoration:none; font-size:12px; font-weight:600; border:1px solid #BBDEFB;">
                                        👁️ Lihat
                                     </a>
                                     
-                                    <?php if ($l['status'] === 'Draft' && hasPermission('ppdb', 'edit')): ?>
-                                        <a href="<?= base_url('ppdb/finalisasi-laporan/'.$l['id']) ?>" 
+                                    <?php if ($l['status'] === 'Draft' && hasPermission('ppdb_laporan', 'edit')): ?>
+                                        <a href="<?= base_url('ppdb/finalisasi-laporan/'.$l['id_ppdb_laporan_tahunan']) ?>" 
                                            class="btn" style="padding:6px 12px; border-radius:6px; background:#E8F5E9; color:#2E7D32; text-decoration:none; font-size:12px; font-weight:600; border:1px solid #81C784;"
                                            onclick="return confirm('Finalisasi laporan ini? Tidak bisa diubah lagi.');">
                                            ✅ Finalisasi
                                         </a>
                                     <?php endif; ?>
                                     
-                                    <?php if ($l['status'] === 'Final' && hasPermission('ppdb', 'delete')): ?>
-                                        <a href="<?= base_url('ppdb/arsipkan-laporan/'.$l['id']) ?>" 
+                                    <?php if ($l['status'] === 'Final' && hasPermission('ppdb_laporan', 'delete')): ?>
+                                        <a href="<?= base_url('ppdb/arsipkan-laporan/'.$l['id_ppdb_laporan_tahunan']) ?>" 
                                            class="btn" style="padding:6px 12px; border-radius:6px; background:#FBE9E7; color:#D84315; text-decoration:none; font-size:12px; font-weight:600; border:1px solid #FFCCBC;"
                                            onclick="return confirm('Arsipkan laporan ini?');">
                                            📦 Arsip

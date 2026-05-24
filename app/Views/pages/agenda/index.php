@@ -28,10 +28,10 @@
                 <td>
                 <div style="display:flex;gap:6px">
                     <?php if (hasPermission('agenda', 'edit')): ?>
-                    <a href="<?= base_url('agenda/edit/'.$ag['id']) ?>" class="btn btn-outline btn-sm">✏️</a>
+                    <a href="<?= base_url('agenda/edit/'.$ag['id_agenda']) ?>" class="btn btn-outline btn-sm">✏️</a>
                     <?php endif; ?>
                     <?php if (hasPermission('agenda', 'delete')): ?>
-                    <a href="<?= base_url('agenda/hapus/'.$ag['id']) ?>" class="btn btn-danger btn-sm"
+                    <a href="<?= base_url('agenda/hapus/'.$ag['id_agenda']) ?>" class="btn btn-danger btn-sm"
                     onclick="return confirm('Hapus agenda ini?')">🗑️</a>
                     <?php endif; ?>
                 </div>

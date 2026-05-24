@@ -25,14 +25,20 @@ class RoleFilter implements FilterInterface
             return; // Tidak ada restriction
         }
 
-        // Parse arguments: 'role:Super Admin,Operator'
+        // CodeIgniter passes filter arguments as ["Super Admin", "Operator"].
+        // Keep support for legacy ["role:Super Admin,Operator"] format too.
         $allowedRoles = [];
         foreach ($arguments as $arg) {
             if (strpos($arg, 'role:') === 0) {
                 $roles = explode(',', substr($arg, 5));
-                $allowedRoles = array_map('trim', $roles);
+                $allowedRoles = array_merge($allowedRoles, array_map('trim', $roles));
+                continue;
             }
+
+            $allowedRoles[] = trim($arg);
         }
+
+        $allowedRoles = array_filter(array_unique($allowedRoles));
 
         if (empty($allowedRoles)) {
             return; // Tidak ada role restriction

@@ -1,6 +1,6 @@
     <?php
     $item     = $item ?? [];
-    $id       = $item['id'] ?? null;
+    $id       = $item['id_ppdb'] ?? null;
     $isEdit   = $id !== null;
     $formAction = $isEdit
         ? base_url('ppdb/update/' . $id)
