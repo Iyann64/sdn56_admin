@@ -8,7 +8,12 @@
     <div style="display:flex; gap:10px;">
         <a href="<?= base_url('ppdb/export/'.$item['id_ppdb']) ?>" 
            class="btn" style="background:#E3F2FD; color:#1565C0; border:1px solid #BBDEFB; padding:10px 20px; border-radius:10px; text-decoration:none; font-size:13px; font-weight:700;">📥 Export Data</a>
-           
+        
+        <?php if (in_array($item['status'], ['Diterima', 'Ditolak'])): ?>
+            <a href="<?= base_url('ppdb/kirim-wa/'.$item['id_ppdb']) ?>" 
+               class="btn" style="background:#E1F5FE; color:#0288D1; border:1px solid #B3E5FC; padding:10px 20px; border-radius:10px; text-decoration:none; font-size:13px; font-weight:700;">📱 Kirim WhatsApp</a>
+        <?php endif; ?>
+
         <?php if (hasPermission('ppdb', 'edit')): ?>
             <?php if ($item['status'] !== 'Diterima'): ?>
                 <a href="<?= base_url('ppdb/status/'.$item['id_ppdb'].'/Diterima') ?>" 

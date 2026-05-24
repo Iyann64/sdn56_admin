@@ -57,6 +57,7 @@ $routes->post('ppdb/simpan',                 'PpdbAdmin::simpan',          ['fil
 $routes->get( 'ppdb/edit/(:num)',            'PpdbAdmin::edit/$1',          ['filter' => 'role:Super Admin']);
 $routes->post('ppdb/update/(:num)',          'PpdbAdmin::update/$1',        ['filter' => 'role:Super Admin']);
 $routes->get( 'ppdb/status/(:num)/(:alpha)', 'PpdbAdmin::ubahStatus/$1/$2', ['filter' => 'role:Super Admin']);
+$routes->get( 'ppdb/kirim-wa/(:num)',        'PpdbAdmin::kirimWaManual/$1', ['filter' => 'role:Super Admin,Operator']);
 $routes->get( 'ppdb/export',                 'PpdbAdmin::export',           ['filter' => 'role:Super Admin,Operator']);
 $routes->get( 'ppdb/export/(:num)',          'PpdbAdmin::export/$1',        ['filter' => 'role:Super Admin,Operator']); // Export single
 $routes->get( 'ppdb/export/0/(:num)',        'PpdbAdmin::export/$1',        ['filter' => 'role:Super Admin,Operator']); // Export yearly - year passed as segment 3

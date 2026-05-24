@@ -15,7 +15,7 @@ class PpdbConfigModel extends Model
     protected $createdField     = 'created_at';
     protected $updatedField     = 'updated_at';
 
-    public function getConfig()
+    public function getConfig(): array
     {
         $rows = $this->findAll();
         $config = [];
@@ -25,5 +25,24 @@ class PpdbConfigModel extends Model
         }
 
         return $config;
+    }
+
+    public function saveConfigValue(string $key, mixed $value, string $type = 'string', ?string $description = null): void
+    {
+        $payload = [
+            'kunci'     => $key,
+            'nilai'     => is_bool($value) ? ($value ? '1' : '0') : (string) $value,
+            'tipe'      => $type,
+            'deskripsi' => $description,
+        ];
+
+        $existing = $this->where('kunci', $key)->first();
+
+        if ($existing) {
+            $this->update($existing[$this->primaryKey], $payload);
+            return;
+        }
+
+        $this->insert($payload);
     }
 }

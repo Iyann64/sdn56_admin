@@ -85,21 +85,20 @@ class Settings extends BaseController
 
     public function simpanPpdbConfig()
     {
-        $data = [
-            'status'   => $this->request->getPost('status'),
-            'tgl_buka' => $this->request->getPost('tgl_buka'),
-            'tgl_tutup'=> $this->request->getPost('tgl_tutup'),
-            'kuota'    => $this->request->getPost('kuota'),
-            'usia_min' => $this->request->getPost('usia_min'),
-            'usia_max' => $this->request->getPost('usia_max'),
-        ];
+        $this->configModel->saveConfigValue('status', $this->request->getPost('status'));
+        $this->configModel->saveConfigValue('tgl_buka', $this->request->getPost('tgl_buka'));
+        $this->configModel->saveConfigValue('tgl_tutup', $this->request->getPost('tgl_tutup'));
+        $this->configModel->saveConfigValue('kuota', $this->request->getPost('kuota'));
+        $this->configModel->saveConfigValue('usia_min', $this->request->getPost('usia_min'), 'integer');
+        $this->configModel->saveConfigValue('usia_max', $this->request->getPost('usia_max'), 'integer');
 
-        $this->configModel->where('kunci', 'status')->set(['nilai' => $data['status']])->update();
-        $this->configModel->where('kunci', 'tgl_buka')->set(['nilai' => $data['tgl_buka']])->update();
-        $this->configModel->where('kunci', 'tgl_tutup')->set(['nilai' => $data['tgl_tutup']])->update();
-        $this->configModel->where('kunci', 'kuota')->set(['nilai' => $data['kuota']])->update();
-        $this->configModel->where('kunci', 'usia_min')->set(['nilai' => $data['usia_min']])->update();
-        $this->configModel->where('kunci', 'usia_max')->set(['nilai' => $data['usia_max']])->update();
+        // Simpan konfigurasi notifikasi
+        $this->configModel->saveConfigValue('ppdb_email_from', $this->request->getPost('ppdb_email_from'));
+        $this->configModel->saveConfigValue('ppdb_email_from_name', $this->request->getPost('ppdb_email_from_name'));
+        $this->configModel->saveConfigValue('wa_enabled', $this->request->getPost('wa_enabled') ? '1' : '0', 'boolean');
+        $this->configModel->saveConfigValue('wa_api_url', $this->request->getPost('wa_api_url'));
+        $this->configModel->saveConfigValue('wa_api_token', $this->request->getPost('wa_api_token'));
+        $this->configModel->saveConfigValue('wa_sender', $this->request->getPost('wa_sender'));
 
         return redirect()->to('/settings')->with('success', 'Konfigurasi PPDB berhasil diperbarui!');
     }

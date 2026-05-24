@@ -71,6 +71,9 @@
                 <td>
                 <div style="display:flex;gap:4px;flex-wrap:wrap">
                     <a href="<?= base_url('ppdb/detail/'.$p['id_ppdb']) ?>" class="btn btn-sm" style="background:var(--c5);color:var(--c1)" title="Cek Kelengkapan">👁️</a>
+                    <?php if (in_array($p['status'], ['Diterima', 'Ditolak'])): ?>
+                    <a href="<?= base_url('ppdb/kirim-wa/'.$p['id_ppdb']) ?>" class="btn btn-sm" style="background:#E1F5FE;color:#0288D1" title="Kirim WA Manual">📱</a>
+                    <?php endif; ?>
                     <?php if (hasPermission('ppdb', 'edit')): ?>
                     <a href="<?= base_url('ppdb/status/'.$p['id_ppdb'].'/Diterima') ?>" class="btn btn-sm" style="background:#E8F5E9;color:#2E7D32">✅</a>
                     <a href="<?= base_url('ppdb/status/'.$p['id_ppdb'].'/Ditolak') ?>"  class="btn btn-sm" style="background:#FFEBEE;color:#C62828">❌</a>

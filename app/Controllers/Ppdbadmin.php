@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Libraries\PpdbNotificationService;
 use App\Models\PpdbModel;
 
 /**
@@ -17,10 +18,12 @@ use App\Models\PpdbModel;
 class PpdbAdmin extends BaseController
 {
     private PpdbModel $model;
+    private PpdbNotificationService $notificationService;
 
     public function __construct()
     {
         $this->model = new PpdbModel();
+        $this->notificationService = new PpdbNotificationService();
     }
 
     public function index(): string
@@ -189,15 +192,33 @@ class PpdbAdmin extends BaseController
     {
         $allowed = ['Diterima', 'Menunggu', 'Ditolak'];
 
-        if (! in_array($status, $allowed)) {
+        if (! in_array($status, $allowed, true)) {
             return redirect()->to('/ppdb')
                 ->with('error', 'Status tidak valid.');
         }
 
+        $item = $this->model->find($id);
+        if (! $item) {
+            return redirect()->to('/ppdb')
+                ->with('error', 'Data tidak ditemukan.');
+        }
+
         $this->model->update($id, ['status' => $status]);
 
-        return redirect()->to('/ppdb')
-            ->with('success', "Status pendaftar diubah ke: <strong>$status</strong>");
+        $message = "Status pendaftar diubah ke: <strong>{$status}</strong>";
+
+        if (in_array($status, ['Diterima', 'Ditolak'], true)) {
+            $notification = $this->notificationService->sendStatusNotification($item, $status);
+
+            if ($notification['email_sent']) {
+                $message .= " dan notifikasi email berhasil dikirim ke <strong>{$item['email']}</strong>.";
+            } else {
+                $err = $notification['errors'][0] ?? 'Kesalahan tidak diketahui';
+                $message .= ", namun <span class='text-danger'>email gagal: {$err}</span>.";
+            }
+        }
+
+        return redirect()->to('/ppdb')->with('success', $message);
     }
 
     public function hapus(int $id)
@@ -471,23 +492,23 @@ class PpdbAdmin extends BaseController
             <tbody>
                 <?php foreach ($data as $row): ?>
                 <tr>
-                    <td class="center"><?= $row['id_ppdb'] ?></td>
-                    <td><?= esc($row['nama']) ?></td>
-                    <td class="text"><?= esc($row['nik_siswa']) ?></td>
-                    <td class="text"><?= esc($row['nisn'] ?: '-') ?></td>
-                    <td class="center"><?= $row['jenis_kelamin'] == 'Laki-laki' ? 'L' : 'P' ?></td>
-                    <td><?= esc($row['agama']) ?></td>
-                    <td><?= esc($row['tempat_lahir']) ?></td>
-                    <td><?= date('d/m/Y', strtotime($row['tgl_lahir'])) ?></td>
-                    <td class="center"><?= $row['usia'] ?></td>
-                    <td><?= esc($row['nama_ortu']) ?></td>
-                    <td class="text"><?= esc($row['telepon']) ?></td>
-                    <td><?= esc($row['email']) ?></td>
-                    <td><?= esc($row['alamat']) ?></td>
-                    <td><?= esc($row['asal']) ?></td>
-                    <td><?= esc($row['jalur_pendaftaran']) ?></td>
-                    <td class="center"><?= strtoupper($row['status']) ?></td>
-                    <td><?= date('d/m/Y', strtotime($row['tgl_daftar'])) ?></td>
+                    <td class="center"><?= (int) $row['id_ppdb'] ?></td>
+                    <td><?= esc((string) ($row['nama'] ?? '')) ?></td>
+                    <td class="text"><?= esc((string) ($row['nik_siswa'] ?? '')) ?></td>
+                    <td class="text"><?= esc((string) ($row['nisn'] ?: '-')) ?></td>
+                    <td class="center"><?= (($row['jenis_kelamin'] ?? '') === 'Laki-laki') ? 'L' : 'P' ?></td>
+                    <td><?= esc((string) ($row['agama'] ?? '')) ?></td>
+                    <td><?= esc((string) ($row['tempat_lahir'] ?? '')) ?></td>
+                    <td><?= ! empty($row['tgl_lahir']) ? date('d/m/Y', strtotime((string) $row['tgl_lahir'])) : '-' ?></td>
+                    <td class="center"><?= esc((string) ($row['usia'] ?? '')) ?></td>
+                    <td><?= esc((string) ($row['nama_ortu'] ?? '')) ?></td>
+                    <td class="text"><?= esc((string) ($row['telepon'] ?? '')) ?></td>
+                    <td><?= esc((string) ($row['email'] ?? '')) ?></td>
+                    <td><?= esc((string) ($row['alamat'] ?? '')) ?></td>
+                    <td><?= esc((string) ($row['asal'] ?? '')) ?></td>
+                    <td><?= esc((string) ($row['jalur_pendaftaran'] ?? '')) ?></td>
+                    <td class="center"><?= esc(strtoupper((string) ($row['status'] ?? ''))) ?></td>
+                    <td><?= ! empty($row['tgl_daftar']) ? date('d/m/Y', strtotime((string) $row['tgl_daftar'])) : '-' ?></td>
                     
                     <!-- Link Dokumen -->
                     <?php 
