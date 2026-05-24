@@ -84,14 +84,6 @@
                 <?php endforeach; ?>
             </select>
             </div>
-            <div class="fg"><label>Email Pengirim Notifikasi</label><input type="email" name="ppdb_email_from" value="<?= esc($ppdb_config['ppdb_email_from'] ?? '') ?>" placeholder="contoh: admin@sekolah.sch.id"></div>
-            <div class="fg"><label>Nama Pengirim Email</label><input type="text" name="ppdb_email_from_name" value="<?= esc($ppdb_config['ppdb_email_from_name'] ?? '') ?>" placeholder="contoh: SDN 56 Prabumulih"></div>
-            <div class="fg" style="grid-column:1/-1">
-                <label><input type="checkbox" name="wa_enabled" value="1" <?= ! empty($ppdb_config['wa_enabled']) ? 'checked' : '' ?>> Aktifkan notifikasi WhatsApp otomatis</label>
-            </div>
-            <div class="fg"><label>WhatsApp API URL</label><input type="text" name="wa_api_url" value="<?= esc($ppdb_config['wa_api_url'] ?? '') ?>" placeholder="https://domain-gateway/api/send"></div>
-            <div class="fg"><label>WhatsApp API Token</label><input type="text" name="wa_api_token" value="<?= esc($ppdb_config['wa_api_token'] ?? '') ?>" placeholder="Token gateway WhatsApp"></div>
-            <div class="fg"><label>WhatsApp Sender</label><input type="text" name="wa_sender" value="<?= esc($ppdb_config['wa_sender'] ?? '') ?>" placeholder="Nama device / sender"></div>
             </div>
             <button type="submit" class="btn btn-primary">💾 Simpan Konfigurasi</button>
         </form>
