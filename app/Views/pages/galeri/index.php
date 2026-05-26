@@ -35,18 +35,23 @@
             </div>
             <?php endif; ?>
             <div class="gm-overlay">
-            <div style="flex:1">
+            <div style="flex:1" onclick="viewGaleri('<?= $src ?>', <?= $isVideo ? 'true' : 'false' ?>)">
                 <div style="font-size:12px;font-weight:600;color:white;margin-bottom:3px"><?= esc($g['nama']) ?></div>
                 <div style="font-size:10px;color:rgba(255,255,255,.7)"><?= esc($g['kategori']) ?></div>
             </div>
             <div class="gm-actions">
+            <?php if ($src): ?>
+            <button class="gm-btn view" onclick="viewGaleri('<?= $src ?>', <?= $isVideo ? 'true' : 'false' ?>)" title="Lihat Full">👁️</button>
+            <?php endif; ?>
             <?php if (hasPermission('galeri', 'edit')): ?>
             <button class="gm-btn edit"
                 onclick='openGaleriModal(
 <?= (int)$g['id_galeri'] ?>,
 <?= json_encode($g['nama']) ?>,
 <?= json_encode($g['kategori']) ?>,
-<?= json_encode($g['emoji']) ?>
+<?= json_encode($g['emoji']) ?>,
+<?= json_encode($src) ?>,
+<?= $isVideo ? 'true' : 'false' ?>
 )'
                 title="Edit">
                 ✏️
@@ -67,6 +72,16 @@
     </div>
     </div>
 
+    <!-- Lightbox Viewer -->
+    <div class="modal-overlay" id="modalViewer" onclick="closeModal('modalViewer')" style="z-index: 9999;">
+        <div style="position:relative; max-width:90%; max-height:90%; margin:auto; display:flex; align-items:center; justify-content:center;" onclick="event.stopPropagation()">
+            <button class="modal-close" onclick="closeModal('modalViewer')" style="position:absolute; top:-40px; right:0; color:white; font-size:30px; background:none; border:none; cursor:pointer;">✕</button>
+            <div id="viewerContent" style="background:#000; border-radius:12px; overflow:hidden; box-shadow:0 20px 50px rgba(0,0,0,.5); display:flex; align-items:center; justify-content:center;">
+                <!-- Media akan muncul di sini via JS -->
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Galeri -->
     <div class="modal-overlay" id="modalGaleri">
         <div class="modal-content">
@@ -82,12 +97,15 @@
                     data-update="<?= base_url('galeri/update') ?>">
                     
                     <?= csrf_field() ?>
-                    <input type="file" id="gFoto" name="foto" accept="image/*,video/*" style="display:none">
+                    <input type="file" id="gFoto" name="foto[]" accept="image/*,video/*" style="display:none" multiple>
                     
                     <div id="uploadZone" class="upload-zone" onclick="document.getElementById('gFoto').click()">
-                        <div style="font-size:40px;margin-bottom:8px">📁</div>
-                        <div style="font-size:14px;font-weight:600;color:var(--c1)">Klik untuk pilih foto atau video</div>
-                        <div style="font-size:12px;color:var(--gray);margin-top:4px">PNG, JPG, WEBP, MP4 — maks. 50MB</div>
+                        <div id="uploadPlaceholder">
+                            <div style="font-size:40px;margin-bottom:8px">📁</div>
+                            <div style="font-size:14px;font-weight:600;color:var(--c1)">Klik untuk pilih foto atau video (bisa pilih banyak)</div>
+                        </div>
+                        <div id="previewContainer" style="display:grid;grid-template-columns:repeat(auto-fill, minmax(80px, 1fr));gap:10px;width:100%;margin-bottom:10px"></div>
+                        <div style="font-size:12px;color:var(--gray);margin-top:4px">PNG, JPG, WEBP, MP4, MOV — maks. 2GB per file</div>
                         <div id="fileName" style="font-size:12px;color:var(--green);margin-top:8px;font-weight:600"></div>
                     </div>
 

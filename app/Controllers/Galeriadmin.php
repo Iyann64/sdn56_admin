@@ -35,30 +35,35 @@ class GaleriAdmin extends BaseController
         $rules = [
             'nama'     => 'required|min_length[3]|max_length[200]',
             'kategori' => 'required',
-            'foto'     => 'uploaded[foto]|max_size[foto,51200]|ext_in[foto,jpg,jpeg,png,webp,mp4,webm,mov]', // Max 50MB
+            'foto'     => 'uploaded[foto.0]|max_size[foto,2097152]|ext_in[foto,jpg,jpeg,png,webp,mp4,webm,mov]', // Maks 2GB per file
         ];
 
         if (! $this->validate($rules)) {
             return redirect()->to('/galeri')
                 ->with('error', implode('<br>', $this->validator->getErrors()));
         }
-        $namaFile = null;
-        $file     = $this->request->getFile('foto');
-        if ($file && $file->isValid() && ! $file->hasMoved()) {
-            $namaFile = $file->getRandomName();
-            // Pindahkan file ke folder uploads/galeri di proyek web publik
-            $file->move($this->data['public_uploads_path'] . 'galeri', $namaFile);
+
+        $files = $this->request->getFileMultiple('foto');
+        $uploadedCount = 0;
+
+        foreach ($files as $file) {
+            if ($file->isValid() && ! $file->hasMoved()) {
+                $namaFile = $file->getRandomName();
+                // Pindahkan file ke folder uploads/galeri di proyek web publik
+                $file->move($this->data['public_uploads_path'] . 'galeri', $namaFile);
+
+                $this->model->insert([
+                    'nama'      => $this->request->getPost('nama'),
+                    'kategori'  => $this->request->getPost('kategori'),
+                    'emoji'     => $this->request->getPost('emoji') ?: '🖼️',
+                    'file_foto' => $namaFile,
+                ]);
+                $uploadedCount++;
+            }
         }
 
-        $this->model->insert([
-            'nama'      => $this->request->getPost('nama'),
-            'kategori'  => $this->request->getPost('kategori'),
-            'emoji'     => $this->request->getPost('emoji') ?: '🖼️',
-            'file_foto' => $namaFile,
-        ]);
-
         return redirect()->to('/galeri')
-            ->with('success', 'Foto berhasil ditambahkan!');
+            ->with('success', $uploadedCount . ' file berhasil ditambahkan!');
     }
 
     public function update(int $id)
@@ -66,7 +71,7 @@ class GaleriAdmin extends BaseController
         $rules = [
             'nama'     => 'required|min_length[3]|max_length[200]',
             'kategori' => 'required',
-            'foto'     => 'permit_empty|max_size[foto,51200]|ext_in[foto,jpg,jpeg,png,webp,mp4,webm,mov]',
+            'foto'     => 'permit_empty|max_size[foto.0,51200]|ext_in[foto.0,jpg,jpeg,png,webp,mp4,webm,mov]',
         ];
 
         if (! $this->validate($rules)) {
@@ -80,7 +85,8 @@ class GaleriAdmin extends BaseController
         }
 
         $namaFile = $item['file_foto'];
-        $file     = $this->request->getFile('foto');
+        $files    = $this->request->getFileMultiple('foto');
+        $file     = $files[0] ?? null;
 
         if ($file && $file->isValid() && ! $file->hasMoved()) {
             // Hapus file lama dari folder publik jika ada

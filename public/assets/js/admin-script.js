@@ -487,7 +487,22 @@ function renderGaleri() {
     </div>`).join('');
 }
 
-function openGaleriModal(id = '', nama = '', kategori = '', emoji = '')
+/**
+ * Lightbox Viewer untuk melihat foto/video full size
+ */
+function viewGaleri(src, isVideo) {
+    const content = document.getElementById('viewerContent');
+    if (!src || !content) return;
+
+    if (isVideo) {
+        content.innerHTML = `<video src="${src}" controls autoplay style="max-width:100%; max-height:85vh; display:block; outline:none;"></video>`;
+    } else {
+        content.innerHTML = `<img src="${src}" style="max-width:100%; max-height:85vh; object-fit:contain; display:block;">`;
+    }
+    document.getElementById('modalViewer').classList.add('open');
+}
+
+function openGaleriModal(id = '', nama = '', kategori = '', emoji = '', currentFile = '', isVideo = false)
 {
     const form = document.getElementById('formGaleri');
     const modal = document.getElementById('modalGaleri');
@@ -495,6 +510,14 @@ function openGaleriModal(id = '', nama = '', kategori = '', emoji = '')
 
     const uploadUrl = form.dataset.upload;
     const updateUrl = form.dataset.update;
+
+    // Reset preview setiap kali modal dibuka
+    const previewContainer = document.getElementById('previewContainer');
+    const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+    const fileName = document.getElementById('fileName');
+    if (previewContainer) previewContainer.innerHTML = '';
+    if (uploadPlaceholder) uploadPlaceholder.style.display = 'block';
+    if (fileName) fileName.textContent = '';
 
     if (id && !updateUrl) {
         console.error("Atribut data-update tidak ditemukan pada formGaleri!");
@@ -507,14 +530,31 @@ function openGaleriModal(id = '', nama = '', kategori = '', emoji = '')
     if (id) {
         form.action = updateUrl + '/' + id;
         
+        document.getElementById('gFoto').multiple = false;
         document.getElementById('gNama').value = nama;
         document.getElementById('gKategori').value = kategori;
         document.getElementById('gEmoji').value = emoji;
+
+        // Tampilkan preview file yang sudah ada di server
+        if (currentFile) {
+            if (uploadPlaceholder) uploadPlaceholder.style.display = 'none';
+            const div = document.createElement('div');
+            div.style.cssText = 'width:100%;aspect-ratio:1;border-radius:8px;overflow:hidden;background:#333;border:2px solid var(--c1);position:relative';
+            if (isVideo) {
+                div.innerHTML = `<video src="${currentFile}" style="width:100%;height:100%;object-fit:cover"></video>`;
+            } else {
+                div.innerHTML = `<img src="${currentFile}" style="width:100%;height:100%;object-fit:cover">`;
+            }
+            if (previewContainer) previewContainer.appendChild(div);
+            if (fileName) {
+                fileName.textContent = 'File saat ini aktif';
+                fileName.style.color = 'var(--c1)';
+            }
+        }
     } else {
         form.action = uploadUrl;
         form.reset();
-        const fileName = document.getElementById('fileName');
-        if (fileName) fileName.textContent = '';
+        document.getElementById('gFoto').multiple = true;
     }
     modal.classList.add('open');
 }
@@ -526,10 +566,39 @@ document.addEventListener('DOMContentLoaded', function() {
   if (fileInput) {
     fileInput.addEventListener('change', function() {
       const fileName = document.getElementById('fileName');
+      const previewContainer = document.getElementById('previewContainer');
+      const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+      
+      if (previewContainer) previewContainer.innerHTML = '';
+
       if (this.files && this.files.length > 0) {
-        fileName.textContent = '✓ ' + this.files[0].name;
+        if (uploadPlaceholder) uploadPlaceholder.style.display = 'none';
+        const count = this.files.length;
+        fileName.textContent = count > 1 ? `✓ ${count} file dipilih` : `✓ ${this.files[0].name}`;
         fileName.style.color = 'var(--green)';
+
+        // Loop untuk membuat preview
+        Array.from(this.files).forEach(file => {
+          const div = document.createElement('div');
+          div.style.cssText = 'width:100%;aspect-ratio:1;border-radius:8px;overflow:hidden;background:#eee;border:1px solid #ddd;position:relative';
+          
+          const url = URL.createObjectURL(file);
+          
+          if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = url;
+            img.style.cssText = 'width:100%;height:100%;object-fit:cover';
+            div.appendChild(img);
+          } else if (file.type.startsWith('video/')) {
+            const vid = document.createElement('video');
+            vid.src = url;
+            vid.style.cssText = 'width:100%;height:100%;object-fit:cover';
+            div.appendChild(vid);
+          }
+          if (previewContainer) previewContainer.appendChild(div);
+        });
       } else {
+        if (uploadPlaceholder) uploadPlaceholder.style.display = 'block';
         fileName.textContent = '';
       }
     });

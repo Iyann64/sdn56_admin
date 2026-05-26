@@ -48,6 +48,15 @@ class PpdbNotificationService
         return "https://api.whatsapp.com/send?phone={$phone}&text=" . urlencode($message);
     }
 
+    private function getSiteName(): string
+    {
+        if (!empty($this->config['ppdb_email_from_name'])) {
+            return $this->config['ppdb_email_from_name'];
+        }
+        
+        return env('email.fromName') ?: (config('Email')->fromName ?? 'SD Negeri 56 Prabumulih');
+    }
+
     private function sendEmail(array $item, string $status): array
     {
         $email = Services::email();
@@ -65,9 +74,7 @@ class PpdbNotificationService
             ? $this->config['ppdb_email_from'] 
             : (env('email.fromEmail') ?: config('Email')->fromEmail);
 
-        $fromName  = !empty($this->config['ppdb_email_from_name']) 
-            ? $this->config['ppdb_email_from_name'] 
-            : (env('email.fromName') ?: config('Email')->fromName);
+        $fromName = $this->getSiteName();
 
         $email->setFrom($fromEmail, $fromName);
         $email->setTo($item['email']);
@@ -114,7 +121,7 @@ class PpdbNotificationService
     {
         $nama = (string) ($item['nama'] ?? '');
         $id   = (int) ($item['id_ppdb'] ?? 0);
-        $site = (string) ($this->config['ppdb_email_from_name'] ?? env('email.fromName', 'SD Negeri 56 Prabumulih'));
+        $site = $this->getSiteName();
 
         $message = "PENGUMUMAN HASIL PPDB\n";
         $message .= "{$site}\n\n";
