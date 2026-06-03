@@ -46,7 +46,7 @@
                 <?php if (!empty($berita_terbaru)): foreach ($berita_terbaru as $b): ?>
                     <div class="activity-item">
                         <div class="act-dot" style="background:var(--success)"></div>
-                        <div class="act-msg">Berita <strong>"<?= esc($b['judul']) ?>"</strong> - <?= esc($b['status']) ?></div>
+                        <div class="act-msg">No. <?= esc($b['id_berita']) ?> - Berita <strong>"<?= esc($b['judul']) ?>"</strong> - <?= esc($b['status']) ?></div>
                         <div class="act-time"><?= date('d M Y', strtotime($b['tanggal'])) ?></div>
                     </div>
                 <?php endforeach; else: ?>
@@ -60,7 +60,7 @@
                 <?php if (!empty($ppdb_pending) && canAccess('ppdb')): foreach ($ppdb_pending as $p): ?>
                     <div class="activity-item">
                         <div class="act-dot" style="background:var(--info)"></div>
-                        <div class="act-msg">Pendaftar PPDB baru: <strong><?= esc($p['nama']) ?></strong> - menunggu verifikasi</div>
+                        <div class="act-msg">No. <?= esc($p['id_ppdb']) ?> - Pendaftar PPDB baru: <strong><?= esc($p['nama']) ?></strong> - menunggu verifikasi</div>
                         <div class="act-time"><?= date('d M Y', strtotime($p['tgl_daftar'])) ?></div>
                     </div>
                 <?php endforeach; endif; ?>

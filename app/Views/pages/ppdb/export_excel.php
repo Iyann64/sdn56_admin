@@ -8,15 +8,15 @@
 
 <table border="1">
     <tr>
-        <td colspan="24" class="title">DATA PENDAFTARAN SISWA BARU (PPDB) SDN 56 PRABUMULIH</td>
+        <td colspan="25" class="title">DATA PENDAFTARAN SISWA BARU (PPDB) SDN 56 PRABUMULIH</td>
     </tr>
     <tr>
-        <td colspan="24" class="center" style="border:none;">Laporan Tahun: <?= $year ?? 'Semua' ?> | Tanggal Ekspor: <?= date('d/m/Y H:i') ?></td>
+        <td colspan="25" class="center" style="border:none;">Laporan Tahun: <?= $year ?? 'Semua' ?> | Tanggal Ekspor: <?= date('d/m/Y H:i') ?></td>
     </tr>
     <tr></tr> <!-- Baris Kosong -->
     <thead>
         <tr class="header">
-            <th>ID</th>
+            <th>No.</th>
             <th>Nama Lengkap</th>
             <th>NIK Siswa</th>
             <th>NISN</th>

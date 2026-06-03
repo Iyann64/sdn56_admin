@@ -70,7 +70,7 @@
     <table>
         <thead>
             <tr>
-                <th width="30" class="text-center">No</th>
+                <th width="30" class="text-center">No.</th>
                 <th>Nama Lengkap</th>
                 <th width="40" class="text-center">L/P</th>
                 <th>Asal Sekolah</th>
@@ -81,9 +81,9 @@
         <tbody>
             <?php if (empty($list)): ?>
                 <tr><td colspan="6" class="text-center">Tidak ada data pendaftar.</td></tr>
-            <?php else: $no = 1; foreach ($list as $p): ?>
+            <?php else: foreach ($list as $p): ?>
                 <tr>
-                    <td class="text-center"><?= $no++ ?></td>
+                    <td class="text-center"><?= esc($p['id_ppdb']) ?></td>
                     <td>
                         <strong><?= esc($p['nama']) ?></strong><br>
                         <span style="font-size: 9px; color: #666;">NIK: <?= esc($p['nik_siswa']) ?></span>

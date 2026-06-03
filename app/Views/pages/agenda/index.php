@@ -9,13 +9,14 @@
         <div class="table-wrap">
         <table>
             <thead>
-            <tr><th>Kegiatan</th><th>Tanggal</th><th>Waktu</th><th>Tempat</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr>
+            <tr><th style="width:70px">No.</th><th>Kegiatan</th><th>Tanggal</th><th>Waktu</th><th>Tempat</th><th>Kategori</th><th>Status</th><th>Aksi</th></tr>
             </thead>
             <tbody>
             <?php if (empty($list)): ?>
-            <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada agenda</td></tr>
+            <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada agenda</td></tr>
             <?php else: foreach ($list as $ag): ?>
             <tr>
+                <td><?= esc($ag['id_agenda']) ?></td>
                 <td><div style="font-weight:600;color:var(--ink)"><?= esc($ag['judul']) ?></div></td>
                 <td><?= date('d M Y', strtotime($ag['tanggal'])) ?></td>
                 <td><?= $ag['waktu'] ? date('H:i', strtotime($ag['waktu'])).' WIB' : '-' ?></td>

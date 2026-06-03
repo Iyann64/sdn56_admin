@@ -25,6 +25,9 @@
             $isVideo = in_array(strtolower($ext), ['mp4', 'webm', 'mov']);
         ?>
         <div class="gm-item" style="<?= (!$isVideo && $src) ? "background:url('$src') center/cover;" : "background:$bg;" ?>">
+            <div style="position:absolute;top:10px;left:10px;z-index:2;min-width:32px;padding:4px 8px;border-radius:8px;background:rgba(0,0,0,.55);color:white;font-size:11px;font-weight:800;text-align:center">
+                No. <?= esc($g['id_galeri']) ?>
+            </div>
             <?php if ($isVideo): ?>
                 <video src="<?= $src ?>" autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0"></video>
             <?php endif; ?>

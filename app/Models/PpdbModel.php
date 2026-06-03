@@ -78,7 +78,7 @@ class PpdbModel extends Model
     public function getDataByYear(int $year): array
     {
         return $this->where("YEAR(tgl_daftar)", $year)
-                    ->orderBy('tgl_daftar', 'ASC')
+                    ->orderBy('id_ppdb', 'ASC')
                     ->findAll();
     }
 

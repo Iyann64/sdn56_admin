@@ -66,6 +66,7 @@
             <table style="width:100%; border-collapse:collapse; font-size:13px;">
                 <thead>
                     <tr style="background:var(--c1); color:white; text-align:left;">
+                        <th style="padding:15px; border-bottom:2px solid var(--c4); width:70px;">No.</th>
                         <th style="padding:15px; border-bottom:2px solid var(--c4);">Tahun Ajaran</th>
                         <th style="padding:15px; border-bottom:2px solid var(--c4);">Total Pendaftar</th>
                         <th style="padding:15px; border-bottom:2px solid var(--c4);">Diterima</th>
@@ -79,6 +80,7 @@
                 <tbody>
                     <?php foreach ($laporan as $l): ?>
                         <tr style="border-bottom:1px solid var(--c4);">
+                            <td style="padding:15px; font-weight:700; color:var(--ink);"><?= esc($l['id_ppdb_laporan_tahunan']) ?></td>
                             <td style="padding:15px; font-weight:600;"><?= esc($l['tahun_ajaran']) ?></td>
                             <td style="padding:15px; text-align:center; font-weight:700; color:var(--c1);">
                                 <?= $l['total_pendaftar'] ?>

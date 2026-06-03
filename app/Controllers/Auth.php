@@ -110,9 +110,9 @@ class Auth extends BaseController
     {
         $email = trim($this->request->getPost('email'));
 
-        if (empty($email)) {
+        if (empty($email) || ! filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return redirect()->to('/forgot-password')
-                ->with('error', 'Email wajib diisi.')
+                ->with('error', 'Email wajib diisi dengan format yang valid.')
                 ->withInput();
         }
 
@@ -134,8 +134,35 @@ class Auth extends BaseController
             'token_expire' => $tokenExpire,
         ]);
 
-        // TODO: Kirim email dengan link reset
-        // Format: /reset-password/{resetToken}
+        $resetLink = base_url('reset-password/' . $resetToken);
+        $emailService = \Config\Services::email();
+
+        $fromEmail = env('email.fromEmail') ?: env('email.SMTPUser') ?: 'noreply@sdn56prabumulih.sch.id';
+        $fromName  = env('email.fromName') ?: 'SDN 56 Prabumulih';
+
+        $emailService->setFrom($fromEmail, $fromName);
+        $emailService->setTo($user['email']);
+        $emailService->setSubject('Reset Password Admin SDN 56 Prabumulih');
+        $emailService->setMessage(view('emails/reset_password', [
+            'nama'       => $user['nama'] ?? 'Admin',
+            'resetLink'  => $resetLink,
+            'expireTime' => date('d M Y H:i', strtotime($tokenExpire)) . ' WIB',
+            'siteName'   => $this->data['site_name'] ?? 'SDN 56 Prabumulih',
+            'logoUrl'    => $this->data['logo_url'] ?? '',
+        ]));
+
+        if (! $emailService->send(false)) {
+            $userModel->update($user['id'], [
+                'reset_token'  => null,
+                'token_expire' => null,
+            ]);
+
+            log_message('error', 'Gagal mengirim email reset password untuk user ID ' . $user['id'] . ': ' . $emailService->printDebugger(['headers', 'subject']));
+
+            return redirect()->to('/forgot-password')
+                ->with('error', 'Gagal mengirim email reset password. Periksa konfigurasi email lalu coba lagi.')
+                ->withInput();
+        }
 
         return redirect()->to('/forgot-password')
             ->with('success', 'Jika email terdaftar, link reset akan dikirim ke email Anda.');

@@ -16,6 +16,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th style="width:70px">No.</th>
                                 <th>Jalur Pendaftaran</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Tanggal Selesai</th>
@@ -26,6 +27,7 @@
                             <?php foreach ($jadwal as $j): ?>
                             <input type="hidden" name="id[]" value="<?= $j['id_ppdb_jadwal'] ?>">
                             <tr>
+                                <td><?= esc($j['id_ppdb_jadwal']) ?></td>
                                 <td><strong><?= esc($j['jalur']) ?></strong></td>
                                 <td>
                                     <input type="date" name="tgl_mulai[<?= $j['id_ppdb_jadwal'] ?>]"

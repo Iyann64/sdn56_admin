@@ -18,6 +18,7 @@ class UserModel extends Model
     protected $allowedFields = [
         'nama', 'username', 'password',
         'email', 'telepon', 'role', 'avatar',
+        'reset_token', 'token_expire',
     ];
 
     protected $useTimestamps = true;

@@ -31,7 +31,7 @@ class PpdbAdmin extends BaseController
         return $this->render('pages/ppdb/index', [
             'title'     => 'Data PPDB',
             'page_icon' => '✏️',
-            'list'      => $this->model->orderBy('tgl_daftar', 'DESC')->findAll(),
+            'list'      => $this->model->orderBy('id_ppdb', 'ASC')->findAll(),
             'summary'   => $this->model->hitungByStatus(),
         ]);
     }
@@ -76,7 +76,7 @@ class PpdbAdmin extends BaseController
             'alamat'          => 'required',
             'tgl_daftar'      => 'required|valid_date[Y-m-d]',
             'usia'            => 'permit_empty|integer',
-            'jalur_pendaftaran' => 'required|in_list[Afirmasi,Mutasi Kerja Orang Tua,Domisili]',
+            'jalur_pendaftaran' => 'required|in_list[Zonasi,Afirmasi,Prestasi,Perpindahan Tugas Orang Tua]',
         ];
 
         if (! $this->validate($rules)) {
@@ -148,7 +148,7 @@ class PpdbAdmin extends BaseController
             'alamat'          => 'required',
             'tgl_daftar'      => 'required|valid_date[Y-m-d]',
             'usia'            => 'permit_empty|integer',
-            'jalur_pendaftaran' => 'required|in_list[Afirmasi,Mutasi Kerja Orang Tua,Domisili]',
+            'jalur_pendaftaran' => 'required|in_list[Zonasi,Afirmasi,Prestasi,Perpindahan Tugas Orang Tua]',
         ];
 
         if (! $this->validate($rules)) {
@@ -429,7 +429,7 @@ class PpdbAdmin extends BaseController
             $data = $this->model->getDataByYear($year);
             $filename = 'Laporan_PPDB_' . $year . '_' . date('Ymd_His') . '.xls';
         } else {
-            $data = $this->model->orderBy('tgl_daftar', 'DESC')->findAll();
+            $data = $this->model->orderBy('id_ppdb', 'ASC')->findAll();
             $filename = 'Data_PPDB_SDN56_' . date('Y-m-d_His') . '.xls';
         }
 

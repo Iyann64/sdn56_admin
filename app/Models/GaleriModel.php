@@ -34,7 +34,7 @@ class GaleriModel extends Model
 
     public function getAll(): array
     {
-        return $this->orderBy('created_at', 'DESC')->findAll();
+        return $this->orderBy('id_galeri', 'ASC')->findAll();
     }
 
     public function getKategori(): array

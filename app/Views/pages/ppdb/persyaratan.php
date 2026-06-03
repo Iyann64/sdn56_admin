@@ -16,6 +16,7 @@
                     <table>
                         <thead>
                             <tr>
+                                <th style="width:70px">No.</th>
                                 <th width="250">Nama Dokumen</th>
                                 <th>Keterangan / Deskripsi</th>
                                 <th style="text-align:center">Wajib</th>
@@ -26,6 +27,7 @@
                             <?php foreach ($dokumen as $d): ?>
                             <input type="hidden" name="id[]" value="<?= $d['id_ppdb_dokumen'] ?>">
                             <tr>
+                                <td><?= esc($d['id_ppdb_dokumen']) ?></td>
                                 <td>
                                     <input type="text" name="nama[<?= $d['id_ppdb_dokumen'] ?>]"
                                            value="<?= esc($d['nama']) ?>" class="form-control" style="font-weight:700">

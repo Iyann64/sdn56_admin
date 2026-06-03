@@ -10,19 +10,20 @@
         <table>
             <thead>
             <tr>
-                <th style="width:60px">Media</th><th>Judul</th><th>Kategori</th><th>Status</th>
+                <th style="width:70px">No.</th><th style="width:60px">Media</th><th>Judul</th><th>Kategori</th><th>Status</th>
                 <th>Tanggal</th><th>Dilihat</th><th>Aksi</th>
             </tr>
             </thead>
             <tbody>
             <?php if (empty($berita_list)): ?>
-            <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada berita</td></tr>
+            <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada berita</td></tr>
             <?php else: foreach ($berita_list as $b): 
                 $ext = $b['thumbnail'] ? pathinfo($b['thumbnail'], PATHINFO_EXTENSION) : '';
                 $isVideo = in_array(strtolower($ext), ['mp4', 'webm', 'mov']);
                 $thumbUrl = $b['thumbnail'] ? $upload_url . 'berita/' . $b['thumbnail'] : null;
             ?>
             <tr>
+                <td><?= esc($b['id_berita']) ?></td>
                 <td>
                     <?php if ($thumbUrl): ?>
                         <?php if ($isVideo): ?>

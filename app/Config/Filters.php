@@ -32,7 +32,14 @@ class Filters extends BaseConfig
     public array $globals = [
         'before' => [
             'csrf'  => ['except' => ['login/proses']],
-            'auth'  => ['except' => ['login', 'login/proses']],  // ← proteksi semua route, kecuali login
+            'auth'  => ['except' => [
+                'login',
+                'login/proses',
+                'forgot-password',
+                'forgot-password/kirim',
+                'reset-password/*',
+                'reset-password/simpan',
+            ]],  // ← proteksi semua route, kecuali auth publik
         ],
         'after' => [
             'toolbar',

@@ -9,13 +9,14 @@
         <div class="table-wrap">
         <table>
             <thead>
-            <tr><th>Nama & NIP</th><th>Jabatan</th><th>Mata Pelajaran</th><th>Status</th><th>Aksi</th></tr>
+            <tr><th style="width:70px">No.</th><th>Nama & NIP</th><th>Jabatan</th><th>Mata Pelajaran</th><th>Status</th><th>Aksi</th></tr>
             </thead>
             <tbody>
             <?php if (empty($list)): ?>
-            <tr><td colspan="5" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada data guru</td></tr>
+            <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada data guru</td></tr>
             <?php else: foreach ($list as $g): ?>
             <tr>
+                <td><?= esc($g['id_guru'] ?? $g['nip']) ?></td>
                 <td>
                 <div style="display:flex;align-items:center;gap:10px">
                     <div style="width:36px;height:36px;border-radius:10px;background:var(--c5);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">

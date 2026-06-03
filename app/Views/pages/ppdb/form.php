@@ -193,13 +193,12 @@
         <!-- ── Status & Tanggal ───────────────── -->
         <div class="form-section-title" style="margin-top:28px">📋 Status Pendaftaran</div>
         <div>
-            <label class="form-label">Jalur Pendaftaran</label>
-            <select name="jalur_pendaftaran" class="form-control">
+            <label class="form-label">Jalur Pendaftaran <span class="req">*</span></label>
+            <select name="jalur_pendaftaran" class="form-control" required>
                 <option value="">Pilih Jalur</option>
-                <option value="Zonasi">Zonasi</option>
-                <option value="Afirmasi">Afirmasi</option>
-                <option value="Prestasi">Prestasi</option>
-                <option value="Perpindahan Tugas Orang Tua">Perpindahan Tugas Orang Tua</option>
+                <option value="Afirmasi" <?= old('jalur_pendaftaran', $item['jalur_pendaftaran'] ?? '') === 'Afirmasi' ? 'selected' : '' ?>>Afirmasi</option>
+                <option value="Domisili" <?= old('jalur_pendaftaran', $item['jalur_pendaftaran'] ?? '') === 'Domisili' ? 'selected' : '' ?>>Domisili</option>
+                <option value="Perpindahan Tugas Orang Tua" <?= old('jalur_pendaftaran', $item['jalur_pendaftaran'] ?? '') === 'Perpindahan Tugas Orang Tua' ? 'selected' : '' ?>>Perpindahan Tugas Orang Tua</option>
             </select>
         </div>
 

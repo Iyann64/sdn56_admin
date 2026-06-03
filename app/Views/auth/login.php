@@ -95,15 +95,6 @@
         </button>
         </form>
 
-        <div class="login-success" id="loginSuccess" style="display:none;">
-            <div class="success-icon">✅</div>
-            <div class="success-title">Login Berhasil!</div>
-            <div class="success-desc" id="successDesc"></div>
-            <div class="success-redirect">
-                <span id="redirectMsg">Mengalihkan ke dashboard dalam <span id="countDown">3</span> detik...</span>
-            </div>
-        </div>
-
         <div class="lf-footer">© <?= date('Y') ?> <span>SD Negeri 56 Prabumulih</span> · Admin Panel v1.0</div>
     </div>
     </div>
@@ -164,13 +155,8 @@
             const data = await response.json();
 
             if (data.status === 'success') {
-                // Show success message
-                showSuccessScreen(data);
-                
-                // Redirect after 3 seconds
-                setTimeout(() => {
-                    window.location.href = data.redirect;
-                }, 3000);
+                // Langsung alihkan tanpa jeda waktu
+                window.location.href = data.redirect;
             } else {
                 // Show error message
                 showAlert(data.message, 'error');
@@ -206,27 +192,6 @@
             setTimeout(() => alertDiv.remove(), 300);
         }, 5000);
     }
-
-    // Show success screen
-    function showSuccessScreen(data) {
-        const loginForm = document.getElementById('loginForm');
-        const loginSuccess = document.getElementById('loginSuccess');
-        const successDesc = document.getElementById('successDesc');
-
-        loginForm.style.display = 'none';
-        loginSuccess.style.display = 'block';
-        successDesc.textContent = `Selamat datang, ${data.user.nama}! (${data.user.role})`;
-
-        // Countdown timer
-        let count = 3;
-        const countdownInterval = setInterval(() => {
-            count--;
-            document.getElementById('countDown').textContent = count;
-            if (count <= 0) {
-                clearInterval(countdownInterval);
-            }
-        }, 1000);
-    }
 </script>
 
 <style>
@@ -242,53 +207,6 @@
     @keyframes spin {
         from { transform: rotate(0deg); }
         to { transform: rotate(360deg); }
-    }
-
-    .login-success {
-        text-align: center;
-        padding: 40px 20px;
-        animation: slideUp 0.4s ease-out;
-    }
-
-    @keyframes slideUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    .success-icon {
-        font-size: 48px;
-        margin-bottom: 16px;
-        animation: bounce 0.6s ease-out;
-    }
-
-    @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-
-    .success-title {
-        font-size: 24px;
-        font-weight: 700;
-        color: var(--success);
-        margin-bottom: 8px;
-    }
-
-    .success-desc {
-        font-size: 13px;
-        color: var(--gray);
-        margin-bottom: 24px;
-    }
-
-    .success-redirect {
-        font-size: 12px;
-        color: var(--gray);
-        font-style: italic;
     }
 </style>
 </body>

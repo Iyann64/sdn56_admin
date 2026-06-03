@@ -33,15 +33,16 @@
         <table>
             <thead>
             <tr>
-                <th>Nama Lengkap</th><th>Tgl Daftar</th><th>Asal Sekolah</th>
+                <th style="width:70px">No.</th><th>Nama Lengkap</th><th>Tgl Daftar</th><th>Asal Sekolah</th>
                 <th>Usia</th><th>Dokumen</th><th>Status</th><th>Aksi</th>
             </tr>
             </thead>
             <tbody>
             <?php if (empty($list)): ?>
-            <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada pendaftar</td></tr>
+            <tr><td colspan="8" style="text-align:center;padding:40px;color:var(--gray)">📭 Belum ada pendaftar</td></tr>
             <?php else: foreach ($list as $p): ?>
             <tr>
+                <td><?= esc($p['id_ppdb']) ?></td>
                 <td><div style="font-weight:600;color:var(--ink)"><?= esc($p['nama']) ?></div>
                     <div style="font-size:11px;color:var(--gray)"><?= esc($p['email'] ?? '') ?></div></td>
                 <td><?= date('d M Y', strtotime($p['tgl_daftar'])) ?></td>

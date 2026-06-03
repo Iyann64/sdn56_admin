@@ -22,7 +22,7 @@
         'icon'     => '✏️', 
         'resource' => 'ppdb',
         'sub'      => [
-            ['page'=>'ppdb',             'icon' => '👥', 'label'=>'Daftar Pendaftar', 'badge'=>2, 'resource'=>'ppdb'],
+            ['page'=>'ppdb',             'icon' => '👥', 'label'=>'Daftar PPDB', 'badge'=>2, 'resource'=>'ppdb'],
             ['page'=>'ppdb/report',      'icon' => '📈', 'label'=>'Statistik & Grafik', 'badge'=>0, 'resource'=>'ppdb_report'],
             ['page'=>'ppdb/laporan',     'icon' => '📂', 'label'=>'Laporan Tahunan',  'badge'=>0, 'resource'=>'ppdb_laporan'],
             ['page'=>'ppdb/persyaratan', 'icon' => '📜', 'label'=>'Syarat Dokumen',    'badge'=>0, 'resource'=>'ppdb_konten'],

@@ -98,6 +98,7 @@ $availableYears = $available_years ?? [];
             <table>
                 <thead>
                 <tr>
+                    <th style="width:70px">No.</th>
                     <th>Nama Lengkap</th>
                     <th>L/P</th>
                     <th>Jalur & Asal</th>
@@ -108,9 +109,10 @@ $availableYears = $available_years ?? [];
                 </thead>
                 <tbody>
                 <?php if (empty($list)): ?>
-                <tr><td colspan="6" style="text-align:center;padding:40px;color:var(--gray)">📭 Tidak ada data untuk tahun ini.</td></tr>
+                <tr><td colspan="7" style="text-align:center;padding:40px;color:var(--gray)">📭 Tidak ada data untuk tahun ini.</td></tr>
                 <?php else: foreach ($list as $i => $p): ?>
                 <tr>
+                    <td><?= esc($p['id_ppdb']) ?></td>
                     <td>
                         <div style="font-weight:600;color:var(--ink)"><?= esc($p['nama']) ?></div>
                         <div style="font-size:11px;color:var(--gray)">NIK: <?= esc($p['nik_siswa']) ?></div>
