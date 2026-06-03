@@ -9,7 +9,7 @@
         <div class="table-wrap">
         <table>
             <thead>
-            <tr><th style="width:70px">No.</th><th>Nama & NIP</th><th>Jabatan</th><th>Mata Pelajaran</th><th>Status</th><th>Aksi</th></tr>
+            <tr><th style="width:70px">NIP</th><th>Nama</th><th>Jabatan</th><th>Mata Pelajaran</th><th>Status</th><th>Aksi</th></tr>
             </thead>
             <tbody>
             <?php if (empty($list)): ?>
@@ -24,7 +24,6 @@
                     </div>
                     <div>
                     <div style="font-weight:600;color:var(--ink)"><?= esc($g['nama']) ?></div>
-                    <div style="font-size:11px;color:var(--gray);font-family:'Fira Code',monospace"><?= esc($g['nip']) ?></div>
                     </div>
                 </div>
                 </td>
