@@ -15,23 +15,23 @@
     }
 
     $menu = [
-    ['page'=>'dashboard','icon'=>'📊','label'=>'Dashboard',           'badge'=>0, 'resource'=>'dashboard'],
-    ['page'=>'berita',   'icon'=>'📰','label'=>'Berita & Konten',     'badge'=>2, 'resource'=>'berita'],
+    ['page'=>'dashboard','icon'=>'📊','label'=>'Dashboard',           'resource'=>'dashboard'],
+    ['page'=>'berita',   'icon'=>'📰','label'=>'Berita & Konten',     'resource'=>'berita'],
     [
         'label'    => 'PPDB', 
         'icon'     => '✏️', 
         'resource' => 'ppdb',
         'sub'      => [
-            ['page'=>'ppdb',             'icon' => '👥', 'label'=>'Daftar PPDB', 'badge'=>2, 'resource'=>'ppdb'],
-            ['page'=>'ppdb/report',      'icon' => '📈', 'label'=>'Statistik & Grafik', 'badge'=>0, 'resource'=>'ppdb_report'],
-            ['page'=>'ppdb/laporan',     'icon' => '📂', 'label'=>'Laporan Tahunan',  'badge'=>0, 'resource'=>'ppdb_laporan'],
-            ['page'=>'ppdb/persyaratan', 'icon' => '📜', 'label'=>'Syarat Dokumen',    'badge'=>0, 'resource'=>'ppdb_konten'],
-            ['page'=>'ppdb/jadwal',      'icon' => '🗓️', 'label'=>'Jadwal PPDB',       'badge'=>0, 'resource'=>'ppdb_konten'],
+            ['page'=>'ppdb',             'icon' => '👥', 'label'=>'Daftar PPDB', 'resource'=>'ppdb'],
+            ['page'=>'ppdb/report',      'icon' => '📈', 'label'=>'Statistik & Grafik', 'resource'=>'ppdb_report'],
+            ['page'=>'ppdb/laporan',     'icon' => '📂', 'label'=>'Laporan Tahunan',  'resource'=>'ppdb_laporan'],
+            ['page'=>'ppdb/persyaratan', 'icon' => '📜', 'label'=>'Syarat Dokumen',    'resource'=>'ppdb_konten'],
+            ['page'=>'ppdb/jadwal',      'icon' => '🗓️', 'label'=>'Jadwal PPDB',       'resource'=>'ppdb_konten'],
         ]
     ],
-    ['page'=>'agenda',   'icon'=>'📅','label'=>'Agenda & Kegiatan',  'badge'=>0, 'resource'=>'agenda'],
-    ['page'=>'galeri',   'icon'=>'🖼️','label'=>'Galeri Foto',         'badge'=>0, 'resource'=>'galeri'],
-    ['page'=>'guru',     'icon'=>'👨‍🏫','label'=>'Guru & Staf',        'badge'=>0, 'resource'=>'guru'],
+    ['page'=>'agenda',   'icon'=>'📅','label'=>'Agenda & Kegiatan',  'resource'=>'agenda'],
+    ['page'=>'galeri',   'icon'=>'🖼️','label'=>'Galeri Foto',         'resource'=>'galeri'],
+    ['page'=>'guru',     'icon'=>'👨‍🏫','label'=>'Guru & Staf',        'resource'=>'guru'],
     ];
     $menuSistem = [
     ['page'=>'settings','icon'=>'⚙️','label'=>'Pengaturan', 'resource'=>'settings'],
@@ -80,9 +80,6 @@
                                             <span class="sb-ic" style="font-size:14px; width:20px; opacity:0.8;"><?= $sub['icon'] ?></span>
                                         <?php endif; ?>
                                         <span class="sb-lbl"><?= esc($sub['label']) ?></span>
-                                        <?php if (isset($sub['badge']) && $sub['badge'] > 0): ?>
-                                            <span class="sb-badge"><?= $sub['badge'] ?></span>
-                                        <?php endif; ?>
                                     </a>
                                 <?php endif; ?>
                             <?php endforeach; ?>
@@ -98,9 +95,6 @@
                     <a href="<?= base_url($m['page']) ?>" class="sb-item <?= $isActive ? 'active' : '' ?>">
                         <span class="sb-ic"><?= $m['icon'] ?></span>
                         <span class="sb-lbl"><?= esc($m['label']) ?></span>
-                        <?php if (isset($m['badge']) && $m['badge'] > 0): ?>
-                            <span class="sb-badge"><?= $m['badge'] ?></span>
-                        <?php endif; ?>
                     </a>
                 <?php endif; ?>
             <?php endif; ?>
