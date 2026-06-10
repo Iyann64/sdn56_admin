@@ -120,9 +120,9 @@ class Auth extends BaseController
         $user = $userModel->where('email', $email)->first();
 
         if (!$user) {
-            // Keamanan: jangan beri tahu email tidak terdaftar
+            // Nonaktifkan proteksi ini sementara untuk testing
             return redirect()->to('/forgot-password')
-                ->with('success', 'Jika email terdaftar, link reset akan dikirim ke email Anda.');
+                ->with('error', 'Email tidak ditemukan di database kami.');
         }
 
         // Generate reset token & simpan ke DB
@@ -137,12 +137,24 @@ class Auth extends BaseController
         $resetLink = base_url('reset-password/' . $resetToken);
         $emailService = \Config\Services::email();
 
-        $fromEmail = env('email.fromEmail') ?: env('email.SMTPUser') ?: 'noreply@sdn56prabumulih.sch.id';
-        $fromName  = env('email.fromName') ?: 'SDN 56 Prabumulih';
+        // Bersihkan state email sebelumnya
+        $emailService->clear(true);
+
+        // Tambahkan newline dan CRLF agar kompatibel dengan standar SMTP Gmail
+        $emailService->setNewline("\r\n");
+        $emailService->setCRLF("\r\n");
+        $emailService->setMailType('html');
+
+        // Ambil konfigurasi dari Config\Email jika di .env tidak ada
+        $emailConfig = config('Email');
+        $fromEmail = env('email.fromEmail') ?: $emailConfig->fromEmail ?: env('email.SMTPUser') ?: $emailConfig->SMTPUser;
+        $fromName  = env('email.fromName') ?: $emailConfig->fromName ?: 'SDN 56 Prabumulih';
 
         $emailService->setFrom($fromEmail, $fromName);
         $emailService->setTo($user['email']);
         $emailService->setSubject('Reset Password Admin SDN 56 Prabumulih');
+
+        // Pastikan view template 'emails/reset_password' sudah ada
         $emailService->setMessage(view('emails/reset_password', [
             'nama'       => $user['nama'] ?? 'Admin',
             'resetLink'  => $resetLink,
@@ -157,7 +169,9 @@ class Auth extends BaseController
                 'token_expire' => null,
             ]);
 
-            log_message('error', 'Gagal mengirim email reset password untuk user ID ' . $user['id'] . ': ' . $emailService->printDebugger(['headers', 'subject']));
+            // Tampilkan semua detail SMTP untuk melihat pesan error asli dari server
+            $debugger = $emailService->printDebugger();
+            log_message('error', "[AUTH ERROR] Gagal kirim email reset ke {$user['email']}. Detail SMTP: " . $debugger);
 
             return redirect()->to('/forgot-password')
                 ->with('error', 'Gagal mengirim email reset password. Periksa konfigurasi email lalu coba lagi.')
@@ -165,7 +179,7 @@ class Auth extends BaseController
         }
 
         return redirect()->to('/forgot-password')
-            ->with('success', 'Jika email terdaftar, link reset akan dikirim ke email Anda.');
+            ->with('success', 'Link reset password telah dikirim ke ' . $user['email']);
     }
 
     // ─── GET /reset-password/{token} ───────────────────────────────

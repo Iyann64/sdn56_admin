@@ -34,6 +34,7 @@ $routes->post('reset-password/simpan', 'Auth::simpanPasswordBaru');
 // ══════════════════════════════════════════════
 $routes->get('/',          'Dashboard::index',  ['filter' => 'auth']);
 $routes->get('/dashboard', 'Dashboard::index',  ['filter' => 'auth']);
+$routes->get('/dashboard/get-updates', 'Dashboard::getUpdates', ['filter' => 'auth']);
 
 
 // ══════════════════════════════════════════════

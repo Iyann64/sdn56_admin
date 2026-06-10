@@ -100,9 +100,10 @@ class PpdbNotificationService
             return ['sent' => true, 'error' => ''];
         }
 
-        // Catat error teknis di log agar admin bisa memeriksa detailnya
-        $debug = $email->printDebugger(['headers', 'subject', 'body']);
-        log_message('error', "[PPDB EMAIL ERROR] SMTP Debug: " . $debug);
+        // Catat error teknis di log agar admin bisa memeriksa detailnya. 
+        // Kita ambil headers untuk melihat respon balik dari server SMTP (misal: Auth Failed atau Timeout)
+        $debugger = $email->printDebugger();
+        log_message('error', "[PPDB EMAIL ERROR] Gagal kirim ke {$item['email']}. SMTP Response: " . $debugger);
 
         // Debugging Konfigurasi
         $conf = config('Email');
@@ -113,7 +114,7 @@ class PpdbNotificationService
 
         return [
             'sent'  => false,
-            'error' => 'Gagal kirim email. Pastikan App Password & konfigurasi .env sudah benar.',
+            'error' => 'Gagal kirim email (SMTP Error). Silakan periksa file log untuk detail teknis.',
         ];
     }
 

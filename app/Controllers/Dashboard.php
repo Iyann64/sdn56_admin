@@ -42,4 +42,27 @@ class Dashboard extends BaseController
             die('ERROR: ' . $e->getMessage() . '<br>File: ' . $e->getFile() . '<br>Line: ' . $e->getLine());
         }
     }
+
+    /**
+     * Mengambil data terbaru untuk update dashboard secara real-time via AJAX
+     */
+    public function getUpdates(): \CodeIgniter\HTTP\Response
+    {
+        $beritaModel = new BeritaModel();
+        $ppdbModel   = new PpdbModel();
+        $agendaModel = new AgendaModel();
+        $guruModel   = new GuruModel();
+
+        return $this->response->setJSON([
+            'stats' => [
+                'total_siswa'   => 512,
+                'total_guru'    => $guruModel->jumlahAktif(),
+                'berita_terbit' => $beritaModel->where('status','Terbit')->countAllResults(),
+                'ppdb_pending'  => $ppdbModel->where('status','Menunggu')->countAllResults(),
+            ],
+            'berita_terbaru' => $beritaModel->orderBy('tanggal','DESC')->limit(5)->findAll(),
+            'ppdb_pending'   => $ppdbModel->where('status','Menunggu')->limit(5)->findAll(),
+            'agenda_aktif'   => $agendaModel->getAktif(5),
+        ]);
+    }
 }

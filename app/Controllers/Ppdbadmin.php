@@ -527,4 +527,32 @@ class PpdbAdmin extends BaseController
         <?php
         exit();
     }
+
+    public function kirimWaManual($id_ppdb = null)
+    {
+        // 1. Validasi ID PPDB dari URL
+        if (empty($id_ppdb) || ! is_numeric($id_ppdb)) {
+            return redirect()->back()->with('error', 'ID Peserta PPDB tidak valid.');
+        }
+
+        // 2. Ambil data peserta dari database
+        $ppdbModel = new PpdbModel(); // Pastikan Anda menginisialisasi model PPDB Anda
+        $peserta = $ppdbModel->find($id_ppdb);
+
+        if (!$peserta) {
+            return redirect()->back()->with('error', 'Data peserta PPDB tidak ditemukan.');
+        }
+
+        // 3. Gunakan PpdbNotificationService untuk mendapatkan link WhatsApp
+        $notificationService = new PpdbNotificationService();
+        $waLink = $notificationService->getWhatsAppLink($peserta);
+
+        // 4. Redirect pengguna ke link WhatsApp yang dihasilkan
+        if (!empty($waLink)) {
+            return redirect()->to($waLink);
+        }
+
+        // Jika gagal membuat link (misalnya nomor telepon tidak valid)
+        return redirect()->back()->with('error', 'Gagal membuat link WhatsApp. Pastikan nomor telepon peserta valid.');
+    }
 }
