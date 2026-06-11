@@ -22,7 +22,7 @@
         'icon'     => '✏️', 
         'resource' => 'ppdb',
         'sub'      => [
-            ['page'=>'ppdb',             'icon' => '👥', 'label'=>'Daftar PPDB', 'resource'=>'ppdb'],
+            ['page'=>'ppdb',             'icon' => '👥', 'label'=>'PPDB List', 'resource'=>'ppdb'],
             ['page'=>'ppdb/report',      'icon' => '📈', 'label'=>'Statistik & Grafik', 'resource'=>'ppdb_report'],
             ['page'=>'ppdb/laporan',     'icon' => '📂', 'label'=>'Laporan Tahunan',  'resource'=>'ppdb_laporan'],
             ['page'=>'ppdb/persyaratan', 'icon' => '📜', 'label'=>'Syarat Dokumen',    'resource'=>'ppdb_konten'],
@@ -120,11 +120,6 @@
             </a>
             <?php endif; ?>
         <?php endforeach; ?>
-
-        <a href="<?= esc($web_url ?? 'http://localhost:8080') ?>" target="_blank" class="sb-item">
-        <span class="sb-ic">🌐</span>
-        <span class="sb-lbl">Lihat Website</span>
-        </a>
     </nav>
 
     <div class="sb-footer">
