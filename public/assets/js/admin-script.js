@@ -46,16 +46,7 @@ const DATA = {
     { id:5, nama:'Ahmad Fauzi, S.Pd',     jabatan:'Guru Mata Pelajaran',  mapel:'PJOK',           nip:'199002282015', status:'Aktif', avatar:'👨‍🏫' },
     { id:6, nama:'Yuni Astuti, S.Pd',     jabatan:'Guru Mata Pelajaran',  mapel:'IPA',            nip:'199510102018', status:'Cuti',  avatar:'👩‍🏫' },
   ],
-  galeri: [
-    { id:1, nama:'Gedung SDN 56', kategori:'Fasilitas', emoji:'🏫', tgl:'2026-01-10' },
-    { id:2, nama:'Olimpiade Sains 2026', kategori:'Prestasi', emoji:'🏆', tgl:'2026-02-20' },
-    { id:3, nama:'Pentas Seni Tahunan', kategori:'Kegiatan', emoji:'🎭', tgl:'2026-01-25' },
-    { id:4, nama:'Turnamen Futsal', kategori:'Olahraga', emoji:'⚽', tgl:'2026-01-28' },
-    { id:5, nama:'Program Adiwiyata', kategori:'Lingkungan', emoji:'🌱', tgl:'2026-02-05' },
-    { id:6, nama:'Wisuda Kelas 6', kategori:'Kegiatan', emoji:'🎓', tgl:'2026-02-18' },
-    { id:7, nama:'Perpustakaan Sekolah', kategori:'Fasilitas', emoji:'📚', tgl:'2026-01-15' },
-    { id:8, nama:'Upacara Bendera', kategori:'Kegiatan', emoji:'🎌', tgl:'2026-02-16' },
-  ],
+  galeri: [],
 };
 
 let editingId = null;

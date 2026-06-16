@@ -26,7 +26,7 @@ class GaleriAdmin extends BaseController
         return $this->render('pages/galeri/index', [
             'title'     => 'Galeri Foto',
             'page_icon' => '🖼️',
-            'list'      => $this->model->orderBy('id_galeri', 'ASC')->findAll(),
+            'list'      => $this->model->orderBy('id_galeri', 'DESC')->findAll(),
         ]);
     }
 
