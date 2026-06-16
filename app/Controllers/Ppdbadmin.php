@@ -511,15 +511,18 @@ class PpdbAdmin extends BaseController
                     <td><?= ! empty($row['tgl_daftar']) ? date('d/m/Y', strtotime((string) $row['tgl_daftar'])) : '-' ?></td>
                     
                     <!-- Link Dokumen -->
-                    <?php 
+                    <?php
                     $docs = ['file_akta', 'file_kk', 'file_ktp_ortu', 'file_foto_siswa', 'file_imunisasi', 'file_surat_sehat', 'file_ijazah_tk', 'file_pernyataan'];
-                    foreach ($docs as $doc): 
-                        if (!empty($row[$doc])): ?>
-                            <td><a href="<?= $this->data['web_url'] . '/uploads/ppdb/' . $row[$doc] ?>">Lihat File</a></td>
-                        <?php else: ?>
-                            <td style="color: #ff0000;">Kosong</td>
-                        <?php endif; 
-                    endforeach; ?>
+                    foreach ($docs as $doc) {
+                        if (!empty($row[$doc])) {
+                            // Menggunakan base_url ke route serveFile agar konsisten dan aman
+                            $fileUrl = base_url('ppdb/serveFile/' . trim((string)$row[$doc]));
+                            echo '<td><a href="' . esc($fileUrl, 'attr') . '">Lihat File</a></td>';
+                        } else {
+                            echo '<td style="color: #ff0000;">Kosong</td>';
+                        }
+                    }
+                    ?>
                 </tr>
                 <?php endforeach; ?>
             </tbody>

@@ -149,7 +149,7 @@
                         </div>
                     </div>
                     <?php if(!empty($file)): ?>
-                        <a href="<?= $web_url . '/uploads/ppdb/' . $file ?>" target="_blank" 
+                        <a href="<?= base_url('ppdb/serveFile/' . $file) ?>" target="_blank" 
                            style="background:var(--c5); color:var(--c1); width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none; box-shadow:0 2px 8px rgba(0,0,0,0.05);" 
                            title="Buka Dokumen">
                            👁️

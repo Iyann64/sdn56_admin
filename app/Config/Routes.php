@@ -86,7 +86,7 @@ $routes->get( 'ppdb/persyaratan',           'PpdbPersyaratan::index',      ['fil
 $routes->post('ppdb/persyaratan/simpan',    'PpdbPersyaratan::simpan',     ['filter' => 'role:Super Admin']);
 
 // Route untuk melayani file upload PPDB di Admin
-$routes->get('uploads/ppdb/(:any)', 'PpdbAdmin::serveFile/$1');
+$routes->get('ppdb/serveFile/(:any)', 'PpdbAdmin::serveFile/$1');
 
 
 

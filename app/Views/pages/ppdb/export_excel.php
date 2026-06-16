@@ -68,8 +68,14 @@
             <?php 
             $docs = ['file_akta', 'file_kk', 'file_ktp_ortu', 'file_foto_siswa', 'file_imunisasi', 'file_surat_sehat', 'file_ijazah_tk', 'file_pernyataan'];
             foreach ($docs as $doc): 
-                if (!empty($row[$doc])): ?>
-                    <td><a href="<?= $web_url . '/uploads/ppdb/' . $row[$doc] ?>">Lihat File</a></td>
+                if (!empty($row[$doc])): 
+                    $fileUrl = base_url('ppdb/serveFile/' . trim((string)$row[$doc]));
+                    $ext = pathinfo($row[$doc], PATHINFO_EXTENSION);
+                    if (in_array(strtolower($ext), ['jpg', 'jpeg', 'png', 'webp', 'gif'])): ?>
+                        <td style="text-align:center; vertical-align:middle;"><img src="<?= $fileUrl ?>" width="60" height="80"></td>
+                    <?php else: ?>
+                        <td><a href="<?= $fileUrl ?>">Lihat File</a></td>
+                    <?php endif; ?>
                 <?php else: ?>
                     <td style="color: #ff0000;">Kosong</td>
                 <?php endif; 
